@@ -1,0 +1,2196 @@
+% !TeX program = xelatex
+% !Mode:: "TeX:UTF-8"
+%%  本模板推荐以下方式编译: xelatex
+%%　    1. 文件默认的编码为 UTF-8 对于windows，请选用支持UTF-8编码的编辑器。
+%%   2. 若是模板有什么问题，请及时与我们取得联系，Email：latexstudio@qq.com。
+%%   3. 可以到  https://ask.latexstudio.net 提问
+%%   4. 请安装 最新版本的 TeXLive 地址：
+%%   http://mirrors.ctan.org/systems/texlive/Images/texlive.iso
+
+\documentclass[a4paper]{nmmcm}
+%\usepackage{ctex}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{booktabs,colortbl}
+\usepackage{xcolor}
+\usepackage{tikz}
+\mcmsetup{CTeX = true,
+        tcn ={\xiaowuhao SHUWEI2601969}, problem = A,
+        sheet = true, titleinsheet = false, keywordsinsheet = true,
+        titlepage = true, abstract = true}
+\usepackage{xurl}
+\setmainfont{Times New Roman}
+\setmonofont[
+    Path=fonts/,
+    UprightFont = *-Regular,
+    BoldFont = *-Bold,
+    ItalicFont = *-Italic
+]{UbuntuMono}
+
+
+% 标题格式修改样式
+\ctexset{
+  section={
+    format+ = \zihao{3} \heiti \raggedright,
+    name = {,、},
+    number = \chinese{section},
+    beforeskip = 1.5ex plus 0.5ex minus .5ex,
+    afterskip = 0.5ex plus 0.2ex minus .2ex,
+    aftername = \hspace*{0pt}
+  },
+  subsection={
+    format+ = \zihao{3}  \raggedright,
+    beforeskip = 1.0ex plus 0.2ex minus .2ex,
+    afterskip = 1.0ex plus 0.2ex minus .2ex,
+    aftername = \hspace{6pt}
+  },
+  subsubsection={
+    %设置对齐方式为居中对齐
+    format+ = \zihao{4} \raggedright,
+    %仅输出subsubsection编号，格式为阿拉伯数字，打字机字体
+    beforeskip = 1.0ex plus 0.2ex minus .2ex,
+    afterskip = 1.0ex plus 0.2ex minus .2ex,
+  }
+}
+
+\usepackage[titles]{tocloft}
+% 目录中三级标题字体大小
+\renewcommand{\cftsubsubsecfont}{\zihao{-4}\songti}
+\renewcommand{\cftsubsubsecpagefont}{\zihao{-4}\songti}
+
+% 目录中三级标题缩进与编号宽度
+\setlength{\cftsubsubsecindent}{4.5em}
+\setlength{\cftsubsubsecnumwidth}{4.0em}
+\renewcommand{\cftdot}{$\cdot$}
+\renewcommand{\cftdotsep}{1}
+\setlength{\cftbeforesecskip}{1pt}
+\setlength{\cftbeforesubsecskip}{0pt}
+\renewcommand{\cftsecfont}{\zihao{-4}\songti}
+\renewcommand{\cftsubsecfont}{\zihao{-4}\songti}
+\renewcommand{\cftsecpagefont}{\zihao{-4}}
+\renewcommand{\cftsubsecpagefont}{\zihao{-4}}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftsecdotsep}}
+\renewcommand{\cftsecdotsep}{\cftdotsep}
+\renewcommand{\cftsecaftersnum}{\hspace*{-1cm}}
+\addtolength{\cftsecnumwidth}{-1cm}
+\usepackage{lipsum}
+
+
+\usepackage{paralist}
+\let\itemize\compactitem
+\let\enditemize\endcompactitem
+\let\enumerate\compactenum
+\let\endenumerate\endcompactenum
+\let\description\compactdesc
+\let\enddescription\endcompactdesc
+
+\setlength\abovedisplayskip{5pt}
+\setlength\belowdisplayskip{-8pt}
+\setlength{\parskip}{0.1em}
+
+\newcommand\wordc[1]{\textbf{#1}}
+\renewcommand{\appendixtocname}{附\quad录}
+\renewcommand{\appendices}{\hspace{-2em}{\sanhao\HEI {\bf 附~~~录}}}
+\colorlet{tableheadcolor}{gray!25} % Table header colour = 25% gray
+\newcommand{\headcol}{\rowcolor{tableheadcolor}}
+
+\title{\heiti\zihao{3} 抱轨式磁浮列车悬浮电磁铁故障检测问题}
+\date{}
+
+\usepackage[font=small,labelfont={bf,sf},tableposition=top]{caption}
+
+
+\begin{document}
+\begin{abstract}
+\input{Abstract}
+
+\begin{keywords}
+{\song\xiaosihao
+电磁力预测模型；垂向动力学；功率放大系数；最小二乘估计；故障定位}
+\end{keywords}
+
+\end{abstract}
+\maketitle
+%\thispagestyle{empty}
+%{\song\xiaosihao
+\tableofcontents
+%}
+
+\newpage
+\setcounter{page}{1}
+\pagestyle{fancy}
+
+\section{问题重述}
+\subsection{引言}
+\input{Introduction}
+
+\subsection{要解决的具体问题}
+
+\setlength{\parindent}{2em}
+
+\indent 抱轨式磁浮列车主要由车体、空气弹簧、悬浮架、悬浮电磁铁和轨道铁磁材料等部分组成。列车悬浮运行时，悬浮电磁铁在电流作用下产生电磁吸引力，并通过悬浮架和空气弹簧与车体发生耦合作用，从而维持车体与轨道之间稳定的悬浮间隙。题目给出了理想实验环境下的电流、悬浮间隙和实测电磁力数据，以及列车悬浮实验过程中的电磁力、悬浮间隙、车体垂向加速度和电磁铁电流等监测数据。本文需要基于上述数据，建立电磁力模型和车体垂向运动模型，并进一步判断悬浮电磁铁功率放大器是否发生故障。
+
+\indent \textbf{问题一：}根据附件1中理想实验环境下测得的电流、悬浮间隙和电磁力数据，研究单个悬浮电磁铁电磁力与电流、悬浮间隙之间的关系，建立电磁力关于电流和悬浮间隙的二元数学模型，并对模型拟合精度进行评价。
+
+\indent \textbf{问题二：}以列车静止悬浮状态为初始条件，综合考虑空气弹簧弹性力、阻尼力、电磁力和重力的共同作用，建立车体与悬浮架垂向运动的微分方程模型。结合附件2中的实际电磁力数据，求解列车在0至10秒内的垂向位移变化，并计算9秒时刻的悬浮间隙。
+
+\indent \textbf{问题三：}在假设全车16台悬浮电磁铁功率放大器系数完全相同且固定不变的条件下，利用悬浮间隙、车体垂向加速度和电磁铁电流等监测数据，建立功率放大器系数的估计方法，并根据附件3数据判断整列车悬浮系统是否存在功率放大器异常故障。
+
+\indent \textbf{问题四：}进一步考虑16台悬浮电磁铁功率放大器系数随时间变化且相互独立的情况，基于附件4中的悬浮间隙、车体垂向加速度和电磁铁电流监测数据，设计单个电磁铁功率放大器故障检测方法，判断是否存在故障，并给出故障电磁铁编号及故障时间段。
+
+
+
+
+
+
+\section{问题分析}
+
+\setlength{\parindent}{2em}
+
+本文研究的是抱轨式磁浮列车悬浮系统的建模与故障检测问题。整体求解思路为：首先根据理想实验数据建立电磁力关于电流和悬浮间隙的数学模型；其次将电磁力作为外部输入，建立车体与悬浮架的垂向运动微分方程；最后结合实际监测数据，分别在功率放大器系数固定一致和时变独立两种条件下，设计功率放大器故障判断与定位方法。因此，本文主要采用数据预处理、最小二乘拟合、动力学微分方程、数值积分和统计异常检测相结合的方法进行分析。
+
+\subsection{问题一的分析}
+
+问题一要求根据附件1中的电流、悬浮间隙和实测电磁力数据，建立单个悬浮电磁铁电磁力关于电流和悬浮间隙的数学模型。该问题本质上是一个带有明确物理规律约束的参数拟合问题，其结果将作为后续垂向动力学建模和功率放大器故障诊断的基础。
+
+根据电磁悬浮理论，理想磁路下电磁铁产生的电磁力与电流平方成正比，与悬浮间隙平方成反比，即
+\begin{equation}
+F_m\propto \frac{I^2}{z^2}.
+\end{equation}
+
+但题目数据中电流存在正负方向变化，而电磁力方向又与电流方向有关。若直接采用$I^2$作为自变量，只能反映电磁力大小，无法保留电流方向信息。因此，本文采用有符号平方项$I|I|$代替传统的$I^2$项，建立如下电磁力模型：
+\begin{equation}
+F=K_0\frac{I|I|}{z^2}+\varepsilon,
+\end{equation}
+其中，$K_0$为待估计的电磁力系数，$\varepsilon$为随机扰动项。
+
+令
+\begin{equation}
+x=\frac{I|I|}{z^2},
+\end{equation}
+则模型可化为过原点线性回归模型：
+\begin{equation}
+F=K_0x+\varepsilon.
+\end{equation}
+
+因此，问题一可转化为单参数最小二乘估计问题。模型建立后，通过决定系数$R^2$、均方根误差RMSE、平均绝对误差MAE、相对RMSE以及残差相关性分析评价模型精度，并将拟合得到的$K_0$作为后续垂向动力学和功率放大器故障诊断的基础参数。
+
+\subsection{问题二的分析}
+
+问题二要求建立车体--悬浮架垂向运动微分方程，并结合附件2中16台电磁铁的实际电磁力数据，计算$0$至$10\,s$内车体与悬浮架的垂向位移以及$9\,s$时刻的悬浮间隙。该问题本质上是一个二自由度弹簧--阻尼系统的动力学建模与数值积分问题。
+
+根据题意，车体与悬浮架可抽象为二自由度弹簧阻尼系统，二者通过空气弹簧连接。车体受到自身重力和空气弹簧作用力，悬浮架受到自身重力、空气弹簧反作用力以及16台电磁铁总电磁力作用。因此，可以分别对车体和悬浮架列写牛顿第二定律，并将附件2中的总电磁力
+\begin{equation}
+F_e(t)=\sum_{i=1}^{16}F_i(t)
+\end{equation}
+作为外部输入。
+
+由于附件2中的电磁力数据为离散时间序列，而微分方程求解需要连续时间输入，故需对$F_e(t)$进行插值处理。随后，将二阶动力学方程转化为一阶状态空间方程，并采用数值积分方法求解车体位移$z_c(t)$和悬浮架位移$z_f(t)$。
+
+需要注意的是，悬浮间隙本身是电磁铁表面到轨道铁磁材料表面的几何距离。题目说明列车静止时悬浮架停靠在轨道上，此时悬浮间隙达到最大值$0.06\,m$。因此，仅对自由动力学模型直接积分，可能会得到悬浮间隙超过最大值或出现负间隙的非物理结果。为保证计算结果符合实际物理约束，本文在自由动力学模型基础上进一步加入完整悬浮间隙硬约束：
+\begin{equation}
+0\leq z_{\mathrm{gap}}(t)\leq 0.06\,m.
+\end{equation}
+
+由于
+\begin{equation}
+z_{\mathrm{gap}}(t)=0.06-z_f(t),
+\end{equation}
+上述约束等价于对悬浮架位移进行物理限制。本文通过比较自由动力学模型、仅下轨约束模型和完整硬约束模型，最终选择满足悬浮间隙物理范围的完整约束模型作为问题二的计算模型。
+
+\subsection{问题三的分析}
+
+问题三假设全车16台电磁铁功率放大系数完全相同且固定不变，要求根据附件3中的悬浮间隙、车体垂向加速度和电磁铁电流数据，定量计算功率放大系数并判断是否存在故障。该问题本质上是基于动力学反演的参数估计与阈值判别问题。
+
+附件3未直接给出各电磁铁的实际电磁力，因此需要利用问题二建立的车体--悬浮架垂向动力学关系反演实际总电磁力。将车体和悬浮架的运动方程相加后，空气弹簧弹性力和阻尼力相互抵消，可得实际总电磁力为
+\begin{equation}
+F_e(t)=(m_c+m_f)g+m_c\ddot{z}_c(t)+m_f\ddot{z}_f(t).
+\end{equation}
+
+又因为悬浮间隙与悬浮架位移之间满足
+\begin{equation}
+z(t)=0.06-z_f(t),
+\end{equation}
+所以
+\begin{equation}
+\ddot{z}_f(t)=-\ddot{z}(t).
+\end{equation}
+
+因此，实际总电磁力可进一步写为
+\begin{equation}
+F_e(t)=(m_c+m_f)g+m_c\ddot{z}_c(t)-m_f\ddot{z}(t),
+\end{equation}
+其中，$\ddot{z}_c(t)$由附件3中的车体垂向加速度给出，$\ddot{z}(t)$由悬浮间隙序列平滑后进行二阶微分得到。
+
+另一方面，根据问题一建立的电磁力模型，第$i$台电磁铁的理想电磁力可表示为
+\begin{equation}
+F_{m,i}(t)=0.080\frac{I_i(t)|I_i(t)|}{z^2(t)}.
+\end{equation}
+因此，16台电磁铁的理想总电磁力为
+\begin{equation}
+F_m(t)=\sum_{i=1}^{16}F_{m,i}(t)
+=0.080\frac{\sum_{i=1}^{16}I_i(t)|I_i(t)|}{z^2(t)}.
+\end{equation}
+
+在统一功率放大系数假设下，实际总电磁力与理想总电磁力之间满足
+\begin{equation}
+F_e(t)=\eta F_m(t)+e(t),
+\end{equation}
+其中，$e(t)$为由传感器噪声、动力学近似误差和悬浮间隙二阶微分误差等因素引起的残差项。
+
+因此，可通过零截距最小二乘法估计统一功率放大系数$\eta$，并将其与题目给出的正常范围$[0.8,1.2]$进行比较。若$\eta<0.8$，则判断为衰减型故障；若$\eta>1.2$，则判断为突增型故障；若$\eta\in[0.8,1.2]$，则认为功率放大器处于正常波动范围。为降低二阶微分噪声和端点效应影响，本文进一步采用平滑窗口、端点剔除、边界样本剔除和截尾均值等方法进行稳健性检验。
+
+\subsection{问题四的分析}
+
+问题四进一步假设16台电磁铁功率放大系数随时间变化且相互独立，要求判断各电磁铁是否存在故障，并给出故障电磁铁编号和故障时间段。与问题三相比，该问题不再是估计统一的功率放大系数，而是需要进行单电磁铁层面的故障定位。
+
+若直接建立模型，则有
+\begin{equation}
+F_e(t)=\sum_{i=1}^{16}\eta_i(t)F_{m,i}(t)+e(t),
+\end{equation}
+其中，$F_e(t)$为由动力学方程反演得到的实际总电磁力，$F_{m,i}(t)$为第$i$台电磁铁的理想电磁力，$\eta_i(t)$为第$i$台电磁铁的时变功率放大系数。
+
+然而，在任意时刻$t$，该方程只有一个总电磁力观测值$F_e(t)$，却包含16个未知的$\eta_i(t)$，因此这是一个欠定问题。也就是说，仅凭附件4中的总加速度、悬浮间隙和电流数据，无法唯一反演每台电磁铁真实的$\eta_i(t)$。这一不可辨识性必须在模型分析中明确说明。
+
+为解决故障定位问题，本文采用两级判断思路。首先计算整车层面的整体加权功率放大系数：
+\begin{equation}
+\rho(t)=\frac{F_e(t)}{F_m(t)},
+\end{equation}
+用于判断整车总电磁力层面是否存在整体异常。由于
+\begin{equation}
+F_e(t)=\sum_{i=1}^{16}\eta_i(t)F_{m,i}(t),
+\end{equation}
+可知
+\begin{equation}
+\rho(t)=
+\frac{\sum_{i=1}^{16}\eta_i(t)F_{m,i}(t)}
+{\sum_{i=1}^{16}F_{m,i}(t)}.
+\end{equation}
+因此，$\rho(t)$本质上是16台电磁铁功率放大系数按照理想电磁力加权后的整体平均值，不能代表某一台电磁铁的单独功率放大系数。
+
+其次，为定位单台电磁铁故障，本文构造相对异常特征。根据理想电磁力模型，定义第$i$台电磁铁的电流--间隙特征量为
+\begin{equation}
+r_i(t)=\frac{I_i^2(t)}{z^2(t)}.
+\end{equation}
+为削弱悬浮间隙和整体工况变化对所有电磁铁的共同影响，对其取对数，并以同一时刻除自身外其余15台电磁铁的中位数作为参考，构造相对特征：
+\begin{equation}
+e_i(t)=\log r_i(t)-\operatorname{median}_{j\neq i}\{\log r_j(t)\}.
+\end{equation}
+
+进一步定义第$i$台电磁铁的相对等效功率放大指标：
+\begin{equation}
+\tilde{\eta}_i(t)=\exp[-e_i(t)].
+\end{equation}
+
+该指标并非由总动力学方程唯一反演得到的真实$\eta_i(t)$，而是用于故障定位的相对等效指标。若$e_i(t)>0$，说明该电磁铁的电流--间隙特征相对于其他电磁铁偏大，可等效为功率放大能力偏弱，对应$\tilde{\eta}_i(t)<1$，属于衰减倾向；若$e_i(t)<0$，说明该电磁铁的电流--间隙特征相对于其他电磁铁偏小，可等效为功率放大能力偏强，对应$\tilde{\eta}_i(t)>1$，属于突增倾向。
+
+根据题目给出的正常范围$\eta\in[0.8,1.2]$，本文将相对等效功率放大指标$\tilde{\eta}_i(t)$与该范围进行比较：当$\tilde{\eta}_i(t)<0.8$时，判定第$i$台电磁铁存在衰减型功率放大器故障；当$\tilde{\eta}_i(t)>1.2$时，判定第$i$台电磁铁存在突增型功率放大器故障。为避免瞬时噪声导致误判，要求异常状态连续持续时间不小于$0.5\,s$，且相邻异常时间段间隔小于$0.1\,s$时合并为同一故障时间段。
+
+基于以上分析，问题四最终采用“整体加权功率放大系数判断整车层面异常，单台相对等效功率放大指标定位局部故障”的两级检测方法。该方法能够在无法唯一反演真实$\eta_i(t)$的条件下，实现故障电磁铁编号和故障时间段的识别。
+
+
+
+\section{模型假设}
+
+\begin{enumerate}
+  \item 假设附件中给出的电流、悬浮间隙、实测电磁力和车体垂向加速度等监测数据总体真实可靠，传感器误差可视为随机扰动。数据预处理时仅剔除缺失值、非有限值以及悬浮间隙 $z\leq 0$ 的样本；对于电流和电磁力的正负值，保留其方向信息，以便描述电流方向对电磁力方向的影响。
+
+  \item 假设单个悬浮电磁铁的理想电磁力主要由电流 $I$ 和悬浮间隙 $z$ 决定，磁饱和、边缘磁通和漏磁等因素的综合影响可由参数 $K_0$ 吸收。因此，问题一采用平方反比模型：
+  \begin{equation}
+  F=K_0\frac{I|I|}{z^2}+\varepsilon,
+  \end{equation}
+  其中，$I|I|$用于同时反映电磁力大小和电流方向，$\varepsilon$表示随机扰动项。
+
+  \item 假设单节抱轨式磁浮列车在研究过程中仅发生垂向一维运动，取竖直向上为正方向，忽略滚转、俯仰、偏航和横向振动等复杂姿态运动。该假设可将列车垂向运动简化为车体--悬浮架二自由度动力学问题。
+
+  \item 假设车体和悬浮架均可视为刚体，空气弹簧及其他连接件的质量忽略不计；悬浮架和16台电磁铁合并为一个等效质量体。由此可分别对车体和悬浮架进行受力分析，并根据牛顿第二定律建立垂向运动微分方程。
+
+  \item 假设空气弹簧在短时小位移范围内满足线性弹簧--阻尼模型，其刚度系数和阻尼系数保持不变，取
+  \begin{equation}
+  k=2\times 10^7\,N/m,\qquad
+  c=8\times 10^4\,N\cdot s/m.
+  \end{equation}
+  因此，空气弹簧作用力可由车体与悬浮架之间的相对位移和相对速度共同确定。
+
+  \item 假设16台悬浮电磁铁产生的电磁力共同作用于悬浮架，忽略力矩和横向分布影响。因此，悬浮架所受总电磁力可表示为各电磁铁电磁力之和：
+  \begin{equation}
+  F_e(t)=\sum_{i=1}^{16}F_i(t).
+  \end{equation}
+
+  \item 假设附件2中实际电磁力数据为离散采样数据，相邻采样点之间可采用线性插值近似，从而为车体--悬浮架垂向动力学方程提供连续时间输入。
+
+  \item 在问题三中，假设全车16台电磁铁功率放大系数完全相同且固定不变，即
+  \begin{equation}
+  F_{mr}=\eta F_{mi}.
+  \end{equation}
+  因此，可通过实际总电磁力与理想总电磁力之间的比例关系估计统一功率放大系数$\eta$，并根据题目给定正常范围$\eta\in[0.8,1.2]$判断是否存在功率放大器故障。
+
+  \item 在问题四中，假设16台电磁铁功率放大系数$\eta_i(t)$会随时间变化且互不相关。由于缺少每台电磁铁实际电磁力的独立测量，真实$\eta_i(t)$不能由附件4数据唯一反演，因此本文采用相对等效特征指标对故障电磁铁进行定位。
+
+  \item 假设短时间实验过程中重力加速度、轨道基准面和最大悬浮间隙$0.06\,m$保持不变，温度、湿度、气流等环境因素对模型参数的影响较小，可并入随机扰动项或模型误差中处理。
+\end{enumerate}
+
+\section{名词解释与符号说明}
+
+\subsection{主要符号与说明}
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.35}
+\caption{主要符号与说明}
+\begin{tabular}{c p{8cm} c}
+\hline
+符号 & 含义 & 单位 \\
+\hline
+$I,\ I_i$ & 单个电磁铁电流、第$i$台电磁铁电流 & A \\
+
+$z,\ z_{\mathrm{gap}}$ & 悬浮间隙 & m \\
+
+$F_{mi}$ & 单个电磁铁理想电磁力 & N \\
+
+$F_{mr,i}$ & 第$i$台电磁铁实际电磁力 & N \\
+
+$F_e(t)$ & 16台电磁铁实际总电磁力 & N \\
+
+$F_m(t)$ & 16台电磁铁理想总电磁力 & N \\
+
+$K_0$ & 电磁力比例系数 & $N\cdot m^2/A^2$ \\
+
+$m_c$ & 车体质量，$33000\,kg$ & kg \\
+
+$m_f$ & 悬浮架及16台电磁铁总质量，$11000\,kg$ & kg \\
+
+$k$ & 空气弹簧刚度，$2\times10^7\,N/m$ & N/m \\
+
+$c$ & 空气弹簧阻尼，$8\times10^4\,N\cdot s/m$ & $N\cdot s/m$ \\
+
+$z_c,\ z_f$ & 车体、悬浮架垂向位移 & m \\
+
+$\dot{z}_c,\ \dot{z}_f$ & 车体、悬浮架垂向速度 & m/s \\
+
+$\ddot{z}_c,\ \ddot{z}_f$ & 车体、悬浮架垂向加速度 & $m/s^2$ \\
+
+$\eta$ & 全车统一功率放大系数 & 无量纲 \\
+
+$\eta_i(t)$ & 第$i$台电磁铁时变功率放大系数 & 无量纲 \\
+
+$\rho(t)$ & 整体加权功率放大系数 & 无量纲 \\
+
+$e_i(t)$ & 第$i$台电磁铁相对特征 & 无量纲 \\
+
+$\tilde{\eta}_i(t)$ & 相对等效功率放大指标 & 无量纲 \\
+
+$\varepsilon,\ e(t)$ & 随机误差或残差项 & N \\
+\hline
+\end{tabular}
+\label{tab:symbols}
+\end{table}
+
+\section{模型的建立与求解}
+
+\subsection{问题一：电磁力关于电流与悬浮间隙的二元数学模型}
+
+\subsubsection{模型准备}
+
+问题一要求根据附件1中理想实验环境下测得的电流$I$、悬浮间隙$z$和实测电磁力$F_{\text{meas}}$，建立电磁力关于电流和悬浮间隙的二元数学模型，并对模型精度进行评价。
+
+利用附件1中的实验数据进行拟合，共得到有效样本99999组。实测电磁力范围为$-18138.5098\,N$至$223492.1985\,N$，电流范围为$-18.8754\,A$至$100.1187\,A$，悬浮间隙范围为$0.02316550\,m$至$0.06000000\,m$。由数据范围可知，电流存在正负方向变化，因此在建立模型时不仅需要考虑电磁力大小，还应考虑电流方向对电磁力方向的影响。
+
+根据电磁悬浮理论，单个悬浮电磁铁产生的电磁力与电流平方成正比，与悬浮间隙平方成反比。考虑到电流方向会影响电磁力方向，本文采用$I|I|$代替传统的$I^2$项，从而建立如下模型：
+\begin{equation}
+F=K_0\frac{I|I|}{z^2}+\varepsilon,
+\end{equation}
+其中，$K_0$为待估计的电磁力系数，$\varepsilon$为随机扰动项，主要反映测量误差、磁路非理想性、传感器噪声和实验扰动等因素。
+
+相应地，单个电磁铁的电磁力预测公式可写为
+\begin{equation}
+\hat{F}=K_0\frac{I|I|}{z^2}.
+\end{equation}
+
+令
+\begin{equation}
+x=\frac{I|I|}{z^2},
+\end{equation}
+则原模型可化为过原点的线性回归模型：
+\begin{equation}
+F=K_0x+\varepsilon.
+\end{equation}
+
+\subsubsection{模型参数求解}
+
+设附件1中经过预处理后的有效样本为$(I_i,z_i,F_i)$，其中$i=1,2,\cdots,n$，$n=99999$。定义
+\begin{equation}
+x_i=\frac{I_i|I_i|}{z_i^2}.
+\end{equation}
+
+采用最小二乘法估计参数$K_0$，即使预测电磁力与实测电磁力之间的残差平方和最小：
+\begin{equation}
+\min_{K_0}\sum_{i=1}^{n}(F_i-K_0x_i)^2.
+\end{equation}
+
+对目标函数关于$K_0$求导并令其为0，可得过原点线性回归模型的参数估计式：
+\begin{equation}
+K_0=\frac{\sum_{i=1}^{n}x_iF_i}{\sum_{i=1}^{n}x_i^2}.
+\end{equation}
+
+将附件1数据代入计算，得到
+\[
+K_0=0.0799874103\quad N\cdot m^2/A^2.
+\]
+
+因此，单个悬浮电磁铁电磁力的预测模型为
+\begin{equation}
+\hat{F}=0.0799874103\frac{I|I|}{z^2}.
+\end{equation}
+
+由于$0.0799874103$与$0.0800$非常接近，为便于后续车体--悬浮架垂向动力学建模和功率放大器故障检测中的计算，本文将其近似取为$0.0800$，即
+\begin{equation}
+\hat{F}=0.0800\frac{I|I|}{z^2}.
+\end{equation}
+
+若只考虑电磁力大小，且电流为正，则有$I|I|=I^2$，模型可写为
+\begin{equation}
+\hat{F}=0.0800\frac{I^2}{z^2}.
+\end{equation}
+
+为直观展示模型拟合效果，绘制实测电磁力与模型预测电磁力的对比图，如图\ref{fig:epsilon_xx}所示。图中横坐标为特征变量$x=\dfrac{I|I|}{z^2}$，纵坐标为电磁力，蓝色散点表示附件1中的实测电磁力，红色直线表示模型预测值。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\textwidth]{epsilon_xx.png}
+    \caption{实测电磁力与预测电磁力对比图}
+    \label{fig:epsilon_xx}
+\end{figure}
+
+由图\ref{fig:epsilon_xx}可以看出，实测电磁力数据点整体沿预测直线附近分布，说明电磁力与特征变量$x=\dfrac{I|I|}{z^2}$之间具有明显的线性关系。随着$x$增大，电磁力基本呈线性增长趋势，验证了电磁力与电流平方成正比、与悬浮间隙平方成反比的理论规律。虽然在样本密集区域存在一定离散波动，但大部分点仍围绕预测直线分布，表明所建立的平方反比模型能够较好刻画电磁力的主要变化趋势。
+
+\subsubsection{模型精度评价}
+
+为评价模型拟合效果，选取决定系数$R^2$、均方根误差RMSE、平均绝对误差MAE以及相对RMSE作为评价指标。
+
+决定系数为
+\begin{equation}
+R^2=1-\frac{\sum_{i=1}^{n}(F_i-\hat{F}_i)^2}
+{\sum_{i=1}^{n}(F_i-\bar{F})^2}.
+\end{equation}
+
+均方根误差为
+\begin{equation}
+RMSE=\sqrt{\frac{1}{n}\sum_{i=1}^{n}(F_i-\hat{F}_i)^2}.
+\end{equation}
+
+平均绝对误差为
+\begin{equation}
+MAE=\frac{1}{n}\sum_{i=1}^{n}|F_i-\hat{F}_i|.
+\end{equation}
+
+相对RMSE定义为
+\begin{equation}
+RMSE_{\text{rel}}=\frac{RMSE}{\frac{1}{n}\sum_{i=1}^{n}|F_i|}\times100\%.
+\end{equation}
+
+模型精度评价结果如表\ref{tab:problem1_accuracy}所示。
+
+\begin{table}[htbp]
+\centering
+\caption{问题一电磁力模型精度评价}
+\label{tab:problem1_accuracy}
+\begin{tabular}{c c}
+\hline
+指标 & 数值 \\
+\hline
+有效数据量 & 99999 \\
+$K_0$ & $0.0799874103\;N\cdot m^2/A^2$ \\
+$R^2$ & 0.878800 \\
+RMSE & $1346.6659\;N$ \\
+MAE & $1074.9967\;N$ \\
+电磁力平均绝对值 & $26979.0504\;N$ \\
+相对RMSE & 4.9915\% \\
+\hline
+\end{tabular}
+\end{table}
+
+由表\ref{tab:problem1_accuracy}可知，模型的均方根误差为$1346.6659\,N$，平均绝对误差为$1074.9967\,N$，相对RMSE为$4.9915\%$，说明模型预测误差相对于电磁力平均量级较小。决定系数$R^2=0.878800$，表明模型能够解释大部分电磁力变化规律。考虑到实测数据中存在传感器噪声、磁路非理想性和实验扰动，该模型已经具有较好的拟合精度和物理可解释性。
+
+\subsubsection{残差分析}
+
+为进一步检验模型是否存在系统性偏差，定义拟合残差为
+\begin{equation}
+\varepsilon_i=F_i-\hat{F}_i.
+\end{equation}
+
+计算得到残差均值与标准差分别为
+\[
+\varepsilon_{\text{mean}}=-0.451416\,N,
+\]
+\[
+\sigma_{\varepsilon}=1346.672537\,N.
+\]
+
+残差主要分布范围为
+\[
+[-6094.966463\,N,\;6213.898374\,N].
+\]
+
+拟合残差的均值接近0，说明模型整体不存在明显系统性高估或低估。残差可近似表示为均值接近0的随机扰动项
+\begin{equation}
+\varepsilon \approx N(-0.4514,\;1346.6725^2).
+\end{equation}
+
+该结果主要用于刻画残差量级，而非严格正态性证明；
+
+为进一步观察残差的分布特征，绘制随机扰动项$\varepsilon$的概率密度分布图，如图\ref{fig:epsilon_pdf}所示。图中蓝色柱状图表示残差的实际概率密度分布，红色曲线表示根据残差均值和标准差得到的正态分布拟合曲线。可以看出，残差整体以0附近为中心呈近似对称分布，大部分残差集中在较小范围内，仅有少量样本分布在两端尾部。这说明模型误差主要表现为随机波动，而不存在明显的整体偏移。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{epsilon_pdf.png}
+    \caption{随机扰动项$\varepsilon$的概率密度分布}
+    \label{fig:epsilon_pdf}
+\end{figure}
+
+进一步绘制残差$\varepsilon$与特征变量$x=\dfrac{I|I|}{z^2}$之间的散点图，如图\ref{fig:epsilon_x}所示。图中大部分散点围绕$\varepsilon=0$水平线随机分布，未呈现明显的单调上升、单调下降或周期性变化趋势，说明残差与主要解释变量$x$之间不存在明显函数关系。虽然在部分样本稀疏区域存在少量离散点，但整体仍围绕零值附近波动，未形成系统性偏差。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{epsilon_x.png}
+    \caption{残差$\varepsilon$与特征变量$x$的关系}
+    \label{fig:epsilon_x}
+\end{figure}
+
+进一步分析残差与悬浮间隙、电流及电流绝对值之间的相关性，计算结果为
+\[
+corr(\varepsilon,z)=0.003867,
+\]
+\[
+corr(\varepsilon,I)=0.002797,
+\]
+\[
+corr(\varepsilon,|I|)=0.004161.
+\]
+
+上述三个相关系数均接近0，说明残差与主要输入变量之间不存在明显相关关系。综上，残差的概率密度分布近似服从以0为中心的正态分布，残差散点图也未表现出明显的结构性规律。因此，剩余误差可视为随机扰动，主要来源于测量误差、磁路非理想性、传感器噪声和实验扰动等因素，当前平方反比模型不存在明显系统性偏差。
+
+\subsubsection{问题一结论}
+
+综上，本文采用
+\begin{equation}
+F=K_0\frac{I|I|}{z^2}+\varepsilon
+\end{equation}
+作为单个悬浮电磁铁的电磁力模型。通过附件1的实验数据拟合得到
+\[
+K_0=0.0799874103\quad N\cdot m^2/A^2.
+\]
+
+为便于后续问题计算，取
+\[
+\boxed{
+K_0=0.0800\quad N\cdot m^2/A^2
+}
+\]
+
+最终确定单个电磁铁的电磁力预测模型为
+\[
+\boxed{
+\hat{F}=0.0800\frac{I|I|}{z^2}
+}
+\]
+
+模型的RMSE为$1346.6659\,N$，MAE为$1074.9967\,N$，相对RMSE为$4.9915\%$，表明模型具有较好的预测精度。残差均值接近0，且残差与悬浮间隙、电流和电流绝对值之间的相关系数均接近0，说明模型不存在明显系统性偏差。
+
+该模型保留了电磁力与电流平方成正比、与悬浮间隙平方成反比的物理关系，同时保留了电流方向对电磁力方向的影响，可作为后续悬浮架--车体垂向动力学建模及功率放大器故障诊断的电磁力计算基础。
+
+\subsection{问题二：车体--悬浮架垂向运动微分方程}
+
+\subsubsection{模型准备}
+
+问题二要求建立车体与悬浮架垂向运动的微分方程，以列车静止悬浮状态为初始条件，结合附件2中16个电磁铁的实际电磁力数据，计算$0$至$10s$内车体与悬浮架的垂向位移，并给出$t=9s$时刻的悬浮间隙。
+
+利用附件2中的实际电磁力数据进行计算，共得到有效样本100001组，时间范围为$0s$至$10s$。16个电磁铁总电磁力范围为
+\[
+-252805.5159N \sim 3564000.0000N.
+\]
+
+总电磁力均值为
+\[
+\overline{F_e}=431200.0000N.
+\]
+
+设第$i$个电磁铁在时刻$t$产生的实际电磁力为$F_i(t)$，则16个电磁铁对悬浮架产生的总电磁力为
+\begin{equation}
+F_e(t)=\sum_{i=1}^{16}F_i(t).
+\end{equation}
+
+根据题目条件，车体质量为 $m_c=33000\,\mathrm{kg}$；悬浮架质量为 $3000\,\mathrm{kg}$，单个电磁铁质量为 $500\,\mathrm{kg}$，共 $16$ 个电磁铁，因此悬浮架与电磁铁的总质量为
+\[
+m_f=3000+16\times 500=11000\,\mathrm{kg}.
+\]
+系统总质量为
+\[
+m_c+m_f=33000+11000=44000\,\mathrm{kg}.
+\]
+取重力加速度 $g=9.8\,\mathrm{m/s^2}$，则系统总重力为
+\[
+(m_c+m_f)g=44000\times 9.8=431200\,\mathrm{N}.
+\]
+
+该值与附件2中16个电磁铁总电磁力均值一致，说明附件2中的电磁力数据整体量级与系统静态悬浮力平衡相匹配，可以作为车体--悬浮架垂向动力学模型的外部输入。
+
+为进一步观察16个电磁铁总电磁力随时间的变化规律，绘制总电磁力时域响应曲线，如图\ref{fig:q2_total_force}所示。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\textwidth]{question_201.png}
+    \caption{16个电磁铁总电磁力时域响应}
+    \label{fig:q2_total_force}
+\end{figure}
+
+由图\ref{fig:q2_total_force}可知，总电磁力在初始阶段存在较大的瞬态冲击峰值，随后围绕系统稳态悬浮所需电磁力附近进行阻尼振荡，并逐渐趋于平稳。该现象说明附件2中的电磁力输入能够反映磁浮系统由初始调节阶段逐渐过渡到稳态悬浮状态的过程。同时，由于初始阶段存在较大的瞬态电磁力波动，若直接进行自由动力学积分，悬浮架可能出现超过最大悬浮间隙或产生负间隙的非物理结果，因此后续需要结合悬浮间隙的物理边界进行约束修正。
+
+\subsubsection{受力分析与运动方程建立}
+
+取竖直向上为正方向，设$z_c(t)$为车体垂向位移，$z_f(t)$为悬浮架垂向位移。车体与悬浮架之间通过空气弹簧连接。车体--悬浮架系统的垂向受力关系如图\ref{fig:q2_force_model}所示。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\textwidth]{question_202.png}
+    \caption{车体--悬浮架垂向二自由度受力模型}
+    \label{fig:q2_force_model}
+\end{figure}
+
+由图\ref{fig:q2_force_model}可知，车体受到自身重力和空气弹簧作用力，悬浮架受到自身重力、空气弹簧反作用力以及16个电磁铁产生的总电磁力。悬浮间隙定义为悬浮电磁铁与轨道铁磁材料之间的距离，当悬浮架向上运动时，悬浮间隙减小。
+
+根据题目给定的空气弹簧力表达式，空气弹簧对车体的作用力为
+\begin{equation}
+F_k=-k(z_c-z_f)-c(\dot{z}_c-\dot{z}_f).
+\end{equation}
+
+等价地，可写为
+\begin{equation}
+F_k=k(z_f-z_c)+c(\dot{z}_f-\dot{z}_c).
+\end{equation}
+
+其中，$k$为空气弹簧等效刚度，$c$为空气弹簧等效阻尼系数。根据题目给定参数，有
+\[
+k=2\times10^7N/m,
+\]
+\[
+c=8\times10^4N\cdot s/m.
+\]
+
+车体受到空气弹簧作用力和自身重力作用。根据牛顿第二定律，车体垂向运动方程为
+\begin{equation}
+m_c\ddot{z}_c=k(z_f-z_c)+c(\dot{z}_f-\dot{z}_c)-m_cg.
+\end{equation}
+
+悬浮架受到电磁力、空气弹簧反作用力和自身重力作用，其垂向运动方程为
+\begin{equation}
+m_f\ddot{z}_f=F_e(t)-k(z_f-z_c)-c(\dot{z}_f-\dot{z}_c)-m_fg.
+\end{equation}
+
+将参数代入，可得
+\begin{equation}
+33000\ddot{z}_c
+=2\times10^7(z_f-z_c)+8\times10^4(\dot{z}_f-\dot{z}_c)-323400,
+\end{equation}
+\begin{equation}
+11000\ddot{z}_f
+=F_e(t)-2\times10^7(z_f-z_c)-8\times10^4(\dot{z}_f-\dot{z}_c)-107800.
+\end{equation}
+
+其中，
+\begin{equation}
+F_e(t)=\sum_{i=1}^{16}F_i(t).
+\end{equation}
+
+由于附件2中的电磁力数据为离散时间序列，计算时对$F_e(t)$采用线性插值，使其作为微分方程连续时间输入。
+
+\subsubsection{初始条件与悬浮间隙关系}
+
+题目说明列车静止时悬浮架停靠在轨道上，此时悬浮间隙达到最大值$0.06\,m$，且车体重力由空气弹簧平衡。因此取悬浮架初始位置为参考零点：
+\begin{equation}
+z_f(0)=0,\quad \dot{z}_f(0)=0.
+\end{equation}
+
+车体初始速度为零：
+\begin{equation}
+\dot{z}_c(0)=0.
+\end{equation}
+
+车体静力平衡满足
+\begin{equation}
+k\left(z_f(0)-z_c(0)\right)=m_cg.
+\end{equation}
+
+由于$z_f(0)=0$，所以
+\begin{equation}
+z_c(0)=-\frac{m_cg}{k}.
+\end{equation}
+
+代入参数得
+\[
+z_c(0)=-\frac{33000\times9.8}{2\times10^7},
+\]
+\[
+z_c(0)=-0.01617\,m.
+\]
+
+因此，系统初始条件为
+\[
+z_c(0)=-0.01617\,m,\quad \dot{z}_c(0)=0,\quad
+z_f(0)=0,\quad \dot{z}_f(0)=0.
+\]
+
+悬浮间隙定义为悬浮电磁铁上表面到轨道铁磁材料下表面的距离。由于初始静止时悬浮间隙最大为$0.06\,m$，且悬浮架向上运动会使悬浮间隙减小，因此悬浮间隙与悬浮架位移之间满足
+\begin{equation}
+z_{\text{gap}}(t)=0.06-z_f(t).
+\end{equation}
+
+\subsubsection{状态空间模型}
+
+为便于数值求解，将二阶微分方程组转化为一阶状态空间形式。令状态变量为
+\begin{equation}
+\mathbf{x}=[x_1,x_2,x_3,x_4]^T
+=[z_c,\dot{z}_c,z_f,\dot{z}_f]^T.
+\end{equation}
+
+则有
+\begin{equation}
+\left\{
+\begin{aligned}
+\dot{x}_1&=x_2,\\
+\dot{x}_2&=\frac{k(x_3-x_1)+c(x_4-x_2)-m_cg}{m_c},\\
+\dot{x}_3&=x_4,\\
+\dot{x}_4&=\frac{F_e(t)-k(x_3-x_1)-c(x_4-x_2)-m_fg}{m_f}.
+\end{aligned}
+\right.
+\end{equation}
+
+写成矩阵形式为
+\begin{equation}
+\dot{\mathbf{x}}=f(t,\mathbf{x}).
+\end{equation}
+
+\subsubsection{数值求解与约束模型比较}
+
+自由动力学模型采用 MATLAB 中的 \texttt{ode45} 进行数值积分；对于加入悬浮间隙约束后的完整硬约束模型，本文采用固定步长四阶 Runge--Kutta 法进行时间推进，并在每个时间步后对悬浮架位移进行边界投影，使其满足
+\[
+0\leq z_f(t)\leq 0.06\,\mathrm{m}.
+\]
+若投影后速度仍指向边界外侧，则将对应速度置零，以模拟非弹性限位接触，求解区间为
+\[
+0\leq t\leq10.
+\]
+
+首先，不对悬浮间隙加入几何边界约束，直接求解自由动力学模型，得到$t=9s$时刻悬浮间隙为
+\[
+z_{\text{gap,free}}(9)=0.0811346247\,m.
+\]
+
+由于 $0.0811346247\,m>0.06\,m$，说明自由模型中悬浮架存在向下越过初始停靠位置的非物理趋势，该结果超过题目给定的最大悬浮间隙。
+
+进一步只加入下轨约束
+\[
+z_f(t)\geq0,
+\]
+即限制悬浮架不能向下穿过初始停靠位置。计算得到$t=9s$时
+\[
+z_{\text{gap,lower}}(9)=-1.5068085502\,m.
+\]
+
+该结果出现负悬浮间隙，说明仅加入下轨约束仍不能保证模型物理可行。这是因为下轨约束只能防止悬浮架向下穿过初始停靠位置，却不能防止悬浮架在较大瞬态电磁力作用下向上穿过轨道铁磁材料。
+
+为直观比较自由动力学模型与接触限位约束模型的差异，绘制两种模型下的悬浮间隙响应曲线，如图\ref{fig:q2_constraint_compare}所示。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\textwidth]{question_203.png}
+    \caption{自由动力学模型与接触限位约束模型的悬浮间隙响应对比}
+    \label{fig:q2_constraint_compare}
+\end{figure}
+
+由图\ref{fig:q2_constraint_compare}可知，自由动力学模型在后期超过最大悬浮间隙$0.06\,m$，说明悬浮架在计算中出现向下越过初始停靠位置的非物理趋势；接触限位约束模型能够将悬浮间隙限制在$0$至$0.06\,m$之间，更符合悬浮间隙作为几何距离的物理含义。因此，本文最终采用完整接触限位约束模型作为问题二的计算模型。
+
+于是，悬浮间隙应同时满足上下边界约束：
+\begin{equation}
+0\leq z_{\text{gap}}(t)\leq0.06\,m.
+\end{equation}
+
+由
+\begin{equation}
+z_{\text{gap}}(t)=0.06-z_f(t),
+\end{equation}
+可得等价约束为
+\begin{equation}
+0\leq z_f(t)\leq0.06\,m.
+\end{equation}
+
+其中，$z_f=0$表示悬浮架停靠在轨道上，此时悬浮间隙最大；$z_f(t)=0.06\,m$表示悬浮间隙为零，悬浮架不能继续向上穿过轨道。因此，本文最终采用完整悬浮间隙硬约束模型：
+\[
+\boxed{
+0\leq z_{\text{gap}}(t)\leq0.06\,m
+}
+\]
+
+即
+\[
+\boxed{
+0\leq z_f(t)\leq0.06\,m
+}
+\]
+
+三种模型的计算结果如表\ref{tab:problem2_compare}所示。
+
+\begin{table}[H]
+\centering
+\caption{问题二不同约束模型计算结果对比}
+\label{tab:problem2_compare}
+\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\textwidth}{
+>{\centering\arraybackslash}p{3.2cm}
+>{\centering\arraybackslash}p{3.5cm}
+>{\centering\arraybackslash}p{3.3cm}
+>{\raggedright\arraybackslash}X}
+\toprule
+模型 & 约束条件 & $z_{\text{gap}}(9)$ & 结果评价 \\
+\midrule
+自由动力学模型 & 无约束 & $0.0811346247\,m$ & 超过最大间隙，不符合物理约束 \\
+下轨约束模型 & $z_f\geq0$ & $-1.5068085502\,m$ & 出现负间隙，不符合物理约束 \\
+完整硬约束模型 & $0\leq z_{\text{gap}}\leq0.06\,m$ & $0.0594704977\,m$ & 满足悬浮间隙物理范围 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+由表\ref{tab:problem2_compare}可知，自由动力学模型和仅下轨约束模型均会产生非物理结果，因此最终采用完整悬浮间隙硬约束模型作为问题二的计算模型。
+
+\subsubsection{完整硬约束模型计算结果}
+
+采用完整悬浮间隙硬约束模型后，关键时刻的计算结果如表\ref{tab:problem2_keytime}所示。
+
+\begin{table}[H]
+\centering
+\caption{完整硬约束模型下关键时刻计算结果}
+\label{tab:problem2_keytime}
+\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\textwidth}{
+>{\centering\arraybackslash}p{1.6cm}
+>{\centering\arraybackslash}p{2.1cm}
+>{\centering\arraybackslash}p{2.1cm}
+>{\centering\arraybackslash}p{2.3cm}
+>{\centering\arraybackslash}p{2.2cm}
+>{\centering\arraybackslash}X}
+\toprule
+时间/s & $z_c$/mm & $z_f$/mm & $z_{\text{gap}}$/mm & $\dot{z}_c$/m/s & $\dot{z}_f$/m/s \\
+\midrule
+0  & -16.170 & 0.000  & 60.000 & 0.000000  & 0.000000 \\
+1  & -18.370 & 0.000  & 60.000 & -0.036610 & 0.000000 \\
+3  & 2.8725  & 19.009 & 40.991 & -0.043751 & -0.044169 \\
+9  & -15.640 & 0.5295 & 59.4705 & -0.018469 & -0.018469 \\
+10 & -6.1129 & 10.060 & 49.940 & 0.011868  & 0.012086 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+由表\ref{tab:problem2_keytime}可知，加入完整硬约束后，悬浮间隙始终满足
+\[
+0\leq z_{\text{gap}}(t)\leq0.06\,m,
+\]
+因此模型结果具有物理可行性。
+
+在$t=9s$时，悬浮架位移为
+\[
+z_f(9)=0.0005295023\,m.
+\]
+
+所以悬浮间隙为
+\[
+z_{\text{gap}}(9)=0.06-z_f(9)=0.0594704977\,m.
+\]
+
+即
+\[
+\boxed{
+z_{\text{gap}}(9)=0.0594704977\,m=59.4705\,mm
+}
+\]
+
+为进一步展示完整接触限位约束模型下车体与悬浮架的垂向运动过程，绘制$0$至$10s$内$z_c(t)$与$z_f(t)$的位移响应曲线，如图\ref{fig:q2_final_displacement}所示。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\textwidth]{question_204.png}
+    \caption{完整接触限位约束模型下车体与悬浮架垂向位移响应}
+    \label{fig:q2_final_displacement}
+\end{figure}
+
+由图\ref{fig:q2_final_displacement}可知，车体与悬浮架在初始阶段出现明显瞬态振荡，随后在空气弹簧阻尼作用下逐渐趋于平稳。在$t=9s$时，悬浮架位移为$z_f(9)=0.5295\,mm$，对应悬浮间隙为
+\[
+z_{\text{gap}}(9)=60-0.5295=59.4705\,mm.
+\]
+
+该结果与表\ref{tab:problem2_keytime}中的计算结果一致，说明完整硬约束模型在保证物理可行性的同时，能够给出稳定的悬浮间隙响应。
+
+\subsubsection{问题二结论}
+
+综上，本文以附件2中16个电磁铁实际电磁力之和$F_e(t)$作为外部输入，建立车体--悬浮架垂向运动微分方程。直接求解自由动力学模型会使$9s$时悬浮间隙超过最大值$0.06\,m$，仅加入下轨约束又会导致负悬浮间隙，因此两者均存在非物理结果。考虑到悬浮间隙本身为距离量，且静止时最大值为$0.06\,m$，本文最终加入完整硬约束：
+\[
+0\leq z_{\text{gap}}(t)\leq0.06\,m.
+\]
+
+数值计算结果表明，完整硬约束模型全过程满足悬浮间隙物理范围。$9s$时悬浮架位移为
+\[
+z_f(9)=0.0005295023\,m.
+\]
+
+因此，$9s$时悬浮间隙为
+\[
+\boxed{
+z_{\text{gap}}(9)=0.0594704977\,m=59.4705\,mm
+}
+\]
+
+该结果作为问题二的最终悬浮间隙数值。
+
+\begin{table}[H]
+\centering
+\caption{问题二所采用模型汇总}
+\label{tab:problem2_model}
+\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\textwidth}{
+>{\centering\arraybackslash}p{2.5cm}
+>{\centering\arraybackslash}p{6.0cm}
+>{\raggedright\arraybackslash}X}
+\toprule
+模型/方法 & 数学形式 & \multicolumn{1}{c}{用途说明} \\
+\midrule
+
+总电磁力模型 
+& $F_e(t)=\sum_{i=1}^{16}F_i(t)$ 
+& 计算16个电磁铁对悬浮架产生的总电磁力 \\
+
+空气弹簧模型 
+& $F_k=k(z_f-z_c)+c(\dot{z}_f-\dot{z}_c)$ 
+& 描述车体与悬浮架之间的弹簧--阻尼连接作用 \\
+
+车体运动方程 
+& $m_c\ddot{z}_c=k(z_f-z_c)+c(\dot{z}_f-\dot{z}_c)-m_cg$ 
+& 描述车体在垂向方向上的运动规律 \\
+
+悬浮架运动方程 
+& $\begin{aligned}
+m_f\ddot{z}_f={}&F_e(t)-k(z_f-z_c)\\
+&-c(\dot{z}_f-\dot{z}_c)-m_fg
+\end{aligned}$ 
+& 描述悬浮架在电磁力、空气弹簧和重力共同作用下的垂向运动规律 \\
+
+线性插值 
+& $F_e(t)\text{由附件2离散数据插值得到}$ 
+& 将离散电磁力数据转化为微分方程求解所需的连续输入 \\
+
+\texttt{ode45}数值积分 
+& $\dot{\mathbf{x}}=f(t,\mathbf{x})$ 
+& 对车体--悬浮架垂向运动微分方程进行数值求解 \\
+
+完整硬约束 
+& $0\leq z_{\text{gap}}(t)\leq0.06\,m$ 
+& 保证悬浮间隙始终处于物理可行范围内 \\
+
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{问题三：固定功率放大系数的故障检测}
+
+\subsubsection{模型准备}
+
+问题三假设全车16台悬浮电磁铁的功率放大器系数完全相同且固定不变，记为$\eta$。功率放大系数定义为实际电磁力与理想电磁力之比：
+\begin{equation}
+\eta=\frac{F_{mr}}{F_{mi}},
+\end{equation}
+其中，$F_{mi}$表示理想电磁力，$F_{mr}$表示实际电磁力。理想情况下$\eta=1$。题目给定功率放大系数的正常范围为
+\begin{equation}
+\eta\in[0.8,1.2].
+\end{equation}
+当$\eta<0.8$时，认为功率放大器出现衰减型故障；当$\eta>1.2$时，认为功率放大器出现突增型故障。
+
+附件3给出了悬浮间隙、车体垂向加速度以及16台电磁铁电流的监测数据。利用附件3中的数据进行计算，共得到有效样本 $100000$ 组，时间范围为 $0\,s$ 至 $9.9999\,s$。其中，悬浮间隙范围为 $0.03149921\,m \sim 0.06000000\,m$，车体垂向加速度范围为 $-9.596872\,m/s^2 \sim 9.446776\,m/s^2$，电磁铁电流范围为 $7.898127\,A \sim 135.789571\,A$。
+
+由于附件3中并未直接给出各电磁铁的实际电磁力，因此本文先利用问题一建立的电磁力模型计算理想总电磁力，再利用问题二中的车体--悬浮架垂向动力学方程反演实际总电磁力，最后通过实际总电磁力与理想总电磁力之间的比例关系估计统一功率放大系数$\eta$。
+
+\subsubsection{理想总电磁力计算}
+
+根据问题一建立的单个电磁铁电磁力预测模型，本文取
+\begin{equation}
+\hat{F}=0.0800\frac{I|I|}{z^2}.
+\end{equation}
+
+附件3给出了16台电磁铁的电流以及悬浮间隙监测值，因此第$i$台电磁铁在$t$时刻的理想电磁力可表示为
+\begin{equation}
+F_{m,i}(t)=0.0800\frac{I_i(t)|I_i(t)|}{z^2(t)},
+\quad i=1,2,\cdots,16.
+\end{equation}
+
+于是，16台电磁铁产生的理想总电磁力为
+\begin{equation}
+F_m(t)=\sum_{i=1}^{16}F_{m,i}(t)
+=0.0800\frac{\sum_{i=1}^{16}I_i(t)|I_i(t)|}{z^2(t)}.
+\end{equation}
+
+将附件3中的电流与悬浮间隙数据代入计算，得到理想总电磁力均值为
+\[
+\overline{F_m}=605167.7113\,N.
+\]
+
+\subsubsection{实际总电磁力反演}
+
+附件3未直接给出各电磁铁实际电磁力，因此需要利用车体--悬浮架垂向动力学方程反演实际总电磁力$F_e(t)$。由问题二建立的车体--悬浮架垂向运动方程可知：
+\begin{equation}
+m_c\ddot{z}_c
+=k(z_f-z_c)+c(\dot{z}_f-\dot{z}_c)-m_cg,
+\end{equation}
+\begin{equation}
+m_f\ddot{z}_f
+=F_e(t)-k(z_f-z_c)-c(\dot{z}_f-\dot{z}_c)-m_fg.
+\end{equation}
+
+将(67)，(68)两式相加，空气弹簧弹性力和阻尼力相互抵消，得到
+\begin{equation}
+m_c\ddot{z}_c(t)+m_f\ddot{z}_f(t)
+=F_e(t)-(m_c+m_f)g.
+\end{equation}
+
+因此，实际总电磁力可反演为
+\begin{equation}
+F_e(t)=(m_c+m_f)g+m_c\ddot{z}_c(t)+m_f\ddot{z}_f(t).
+\end{equation}
+
+又因为悬浮间隙$z(t)$与悬浮架位移$z_f(t)$之间满足
+\begin{equation}
+z(t)=0.06-z_f(t),
+\end{equation}
+所以
+\begin{equation}
+\ddot{z}_f(t)=-\ddot{z}(t).
+\end{equation}
+
+于是实际总电磁力反演公式可写为
+\begin{equation}
+F_e(t)=(m_c+m_f)g+m_c\ddot{z}_c(t)-m_f\ddot{z}(t).
+\end{equation}
+
+系统参数取为 $m_c=33000\,kg$，$m_f=11000\,kg$，$g=9.8\,m/s^2$。代入式(73)可得
+\begin{equation}
+F_e(t)=431200+33000\ddot{z}_c(t)-11000\ddot{z}(t).
+\end{equation}
+
+其中，$\ddot{z}_c(t)$由附件3中的车体垂向加速度直接给出，$\ddot{z}(t)$由悬浮间隙序列进行二阶微分得到。由于二阶微分容易放大测量噪声，本文先对悬浮间隙$z(t)$进行平滑处理，再计算二阶导数。基准计算中取平滑窗口长度为1001，对应时间长度约为$0.1001\,s$。
+
+为展示平滑处理对悬浮间隙数据的影响，绘制悬浮间隙原始数据与平滑数据对比图，如图\ref{fig:q3_gap_smooth}所示。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.88\textwidth]{question_301}
+\caption{悬浮间隙原始数据与平滑数据对比}
+\label{fig:q3_gap_smooth}
+\end{figure}
+
+由图\ref{fig:q3_gap_smooth}可知，原始悬浮间隙在初始阶段存在较明显的瞬态波动，而经过平滑处理后，曲线整体变化趋势保持不变，同时局部高频噪声得到抑制。由于实际总电磁力反演中需要用到悬浮间隙的二阶导数，平滑处理能够降低微分过程对噪声的放大作用，提高实际总电磁力反演的稳定性。
+
+将附件3数据代入实际总电磁力反演公式，得到实际总电磁力均值为
+\[
+\overline{F_e}=431031.2555\,N.
+\]
+
+\subsubsection{功率放大系数估计}
+
+在全车16台电磁铁功率放大系数完全相同且固定不变的假设下，实际总电磁力与理想总电磁力之间满足
+\begin{equation}
+F_e(t)=\eta F_m(t)+e(t),
+\end{equation}
+其中，$e(t)$表示由传感器噪声、动力学近似误差和间隙二阶微分误差等因素引起的残差项。
+
+为了获得全车统一的功率放大系数，采用零截距最小二乘法估计$\eta$。目标函数为
+\begin{equation}
+\min_{\eta}\sum_{j=1}^{n}
+\left[F_e(t_j)-\eta F_m(t_j)\right]^2.
+\end{equation}
+
+对目标函数关于$\eta$求导并令其为零，可得
+\begin{equation}
+\hat{\eta}
+=
+\frac{\sum_{j=1}^{n}F_m(t_j)F_e(t_j)}
+{\sum_{j=1}^{n}F_m^2(t_j)}.
+\end{equation}
+
+考虑到$F_e(t)$中的$\ddot{z}(t)$由二阶微分得到，序列首尾端容易产生端点误差，因此本文以剔除首尾$0.10\,s$后的估计值作为主要结果。计算得到
+\[
+\boxed{
+\hat{\eta}\approx0.71199
+}
+\]
+
+同时，作为对照，全样本估计值为
+\[
+\hat{\eta}_{all}=0.7071311922.
+\]
+
+为直观比较实际总电磁力、理想总电磁力以及按估计功率放大系数修正后的总电磁力，绘制三者的时域对比图，如图\ref{fig:q3_force_compare}所示。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.88\textwidth]{question_302}
+\caption{实际总电磁力与理想总电磁力对比}
+\label{fig:q3_force_compare}
+\end{figure}
+
+由图\ref{fig:q3_force_compare}可知，理想总电磁力$F_m(t)$整体明显高于由动力学方程反演得到的实际总电磁力$F_e(t)$。而将理想总电磁力乘以估计系数$\hat{\eta}$后，$\hat{\eta}F_m(t)$与实际总电磁力$F_e(t)$在大部分时间段内具有较好的一致性，说明用统一功率放大系数描述实际电磁力相对于理想电磁力的整体衰减具有合理性。
+
+进一步定义瞬时功率放大系数为
+\begin{equation}
+\eta(t)=\frac{F_e(t)}{F_m(t)}.
+\end{equation}
+
+计算得到瞬时$\eta(t)$的统计结果为
+\[
+\overline{\eta(t)}=0.7138418788,
+\]
+\[
+\mathrm{median}\{\eta(t)\}=0.7127490310,
+\]
+\[
+\sigma_{\eta}=0.0534655411.
+\]
+
+瞬时功率放大系数随时间变化曲线如图\ref{fig:q3_eta_time}所示。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.88\textwidth]{question_303}
+\caption{瞬时功率放大系数$\eta(t)$随时间变化}
+\label{fig:q3_eta_time}
+\end{figure}
+
+由图\ref{fig:q3_eta_time}可知，除初始极短时间段存在较大瞬态波动外，瞬时功率放大系数$\eta(t)$主要稳定在$0.7$附近，明显低于正常下限$0.8$。这说明实际总电磁力相对于理想总电磁力存在稳定衰减，而不是由个别瞬时噪声点造成的偶然偏差。
+
+为了进一步说明最小二乘估计的含义，绘制$F_e=\eta F_m$回归估计图，如图\ref{fig:q3_regression}所示。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.88\textwidth]{question_304}
+\caption{$F_e=\eta F_m$回归估计图}
+\label{fig:q3_regression}
+\end{figure}
+
+由图\ref{fig:q3_regression}可知，实际总电磁力$F_e(t)$与理想总电磁力$F_m(t)$之间整体呈正相关关系，但数据点主要分布在理想比例$\eta=1$以下。最小二乘拟合线的斜率即为估计得到的功率放大系数，其数值显著小于1，进一步说明实际电磁力输出相对于理想电磁力存在整体衰减。
+
+\subsubsection{模型误差评价}
+
+根据估计得到的功率放大系数，预测实际总电磁力为
+\begin{equation}
+\hat{F}_e(t)=\hat{\eta}F_m(t).
+\end{equation}
+
+定义残差为
+\begin{equation}
+e(t)=F_e(t)-\hat{F}_e(t).
+\end{equation}
+
+选取均方根误差RMSE、平均绝对误差MAE和相对RMSE作为模型误差评价指标：
+\begin{equation}
+RMSE=\sqrt{\frac{1}{n}\sum_{j=1}^{n}
+\left[F_e(t_j)-\hat{F}_e(t_j)\right]^2},
+\end{equation}
+\begin{equation}
+MAE=\frac{1}{n}\sum_{j=1}^{n}
+\left|F_e(t_j)-\hat{F}_e(t_j)\right|,
+\end{equation}
+\begin{equation}
+RMSE_{rel}=
+\frac{RMSE}{|\overline{F_e}|}\times100\%.
+\end{equation}
+
+基准模型计算结果如表\ref{tab:problem3_result}所示。
+
+\begin{table}[htbp]
+\centering
+\caption{问题三功率放大系数估计结果}
+\label{tab:problem3_result}
+\begin{tabular}{c c}
+\hline
+指标 & 数值 \\
+\hline
+有效数据量 & 100000 \\
+$\overline{F_e}$ & $431031.2555\,N$ \\
+$\overline{F_m}$ & $605167.7113\,N$ \\
+全样本$\hat{\eta}_{all}$ & 0.7071311922 \\
+瞬时$\eta(t)$均值 & 0.7138418788 \\
+瞬时$\eta(t)$中位数 & 0.7127490310 \\
+瞬时$\eta(t)$标准差 & 0.0534655411 \\
+RMSE & $54895.2233\,N$ \\
+MAE & $11073.9112\,N$ \\
+相对RMSE & 12.7358\% \\
+判定阈值 & $[0.8,1.2]$ \\
+判定结果 & 功率放大器衰减型故障 \\
+\hline
+\end{tabular}
+\end{table}
+
+由表\ref{tab:problem3_result}可知，全样本估计得到的功率放大系数为$0.7071311922$，瞬时功率放大系数均值为$0.7138418788$，中位数为$0.7127490310$，三者均明显小于正常下限$0.8$。这表明在统一功率放大系数假设下，实际总电磁力相对于理想总电磁力存在明显衰减。
+
+需要指出的是，$F_e(t)$是由车体垂向加速度和悬浮间隙二阶导数反演得到的，而二阶微分会放大局部测量噪声，因此误差评价主要用于衡量反演模型与比例模型之间的整体一致性；最终故障判定仍以功率放大系数$\eta$是否超出$[0.8,1.2]$为主要依据。
+
+\subsubsection{稳健性检验}
+
+为检验功率放大系数估计结果是否受平滑窗口、边界样本和端点误差影响，本文进一步进行稳健性检验。
+
+\paragraph{（1）平滑窗口敏感性分析}
+
+分别取平滑窗口长度为501、1001、2001、5001和10001，对应时间长度约为$0.0501\,s$、$0.1001\,s$、$0.2001\,s$、$0.5001\,s$和$1.0001\,s$。不同平滑窗口下的估计结果如表\ref{tab:problem3_window}所示。
+
+\begin{table}[htbp]
+\centering
+\caption{不同平滑窗口下的功率放大系数估计结果}
+\label{tab:problem3_window}
+\begin{tabular}{c c c c}
+\hline
+平滑窗口 & 时间长度/s & $\hat{\eta}$ & 相对RMSE \\
+\hline
+501 & 0.0501 & 0.7064767194 & 16.069\% \\
+1001 & 0.1001 & 0.7071311922 & 12.736\% \\
+2001 & 0.2001 & 0.7071869513 & 10.576\% \\
+5001 & 0.5001 & 0.7071055125 & 9.2892\% \\
+10001 & 1.0001 & 0.7071305070 & 9.0488\% \\
+\hline
+\end{tabular}
+\end{table}
+
+由表\ref{tab:problem3_window}可知，平滑窗口从501增大到10001时，$\hat{\eta}$始终稳定在$0.707$附近，且均小于正常下限$0.8$，说明故障判定结果对平滑窗口不敏感。
+
+\paragraph{（2）边界样本剔除检验}
+
+附件3中悬浮间隙最大值达到$0.06000000\,m$。当悬浮间隙接近最大值时，悬浮架可能接近下轨边界，边界约束反力可能对实际总电磁力反演产生影响。因此，本文分别剔除$z(t)>0.0599\,m$、$z(t)>0.0595\,m$、$z(t)>0.0590\,m$和$z(t)>0.0580\,m$的样本，重新估计$\eta$，结果如表\ref{tab:problem3_boundary}所示。
+
+\begin{table}[htbp]
+\centering
+\caption{边界样本剔除后的功率放大系数估计结果}
+\label{tab:problem3_boundary}
+\begin{tabular}{c c c c}
+\hline
+最大悬浮间隙阈值/m & 有效样本数 & $\hat{\eta}$ & 相对RMSE \\
+\hline
+0.0600 & 100000 & 0.7071311922 & 12.736\% \\
+0.0599 & 99989 & 0.70933 & 11.661\% \\
+0.0595 & 99975 & 0.71118 & 10.723\% \\
+0.0590 & 99965 & 0.71197 & 10.331\% \\
+0.0580 & 99948 & 0.71280 & 9.9452\% \\
+\hline
+\end{tabular}
+\end{table}
+
+由表\ref{tab:problem3_boundary}可知，删除接近最大悬浮间隙的边界样本后，$\hat{\eta}$略有上升，但仍稳定小于$0.8$，说明故障判定不依赖于边界样本。
+
+\paragraph{（3）首尾端点剔除检验}
+
+由于悬浮间隙二阶微分在序列首尾容易产生较大数值误差，本文分别删除首尾$0.05\,s$、$0.10\,s$、$0.20\,s$和$0.50\,s$的数据后重新估计$\eta$，结果如表\ref{tab:problem3_endpoint}所示。
+
+\begin{table}[htbp]
+\centering
+\caption{首尾端点剔除后的功率放大系数估计结果}
+\label{tab:problem3_endpoint}
+\begin{tabular}{c c c c c}
+\hline
+首尾删除时间/s & 有效样本数 & $\hat{\eta}$ & $R^2$ & 相对RMSE \\
+\hline
+0 & 100000 & 0.7071311922 & 0.210753 & 12.736\% \\
+0.05 & 99000 & 0.71199 & 0.58458 & 8.6086\% \\
+0.10 & 98000 & 0.71199 & 0.93735 & 2.5888\% \\
+0.20 & 96000 & 0.71199 & 0.89990 & 2.5825\% \\
+0.50 & 90000 & 0.71203 & 0.74217 & 2.5745\% \\
+\hline
+\end{tabular}
+\end{table}
+
+由表\ref{tab:problem3_endpoint}可知，删除首尾端点后，$\hat{\eta}$稳定在$0.712$附近，并且相对RMSE明显降低。特别是删除首尾$0.10\,s$后，相对RMSE降至$2.5888\%$，说明原始全样本中的较大误差主要来自端点微分误差或局部尖峰，而功率放大系数估计值本身仍然稳定低于$0.8$。
+
+\paragraph{（4）瞬时功率放大系数截尾检验}
+
+为避免局部反演尖峰对瞬时功率放大系数统计结果造成影响，进一步对瞬时$\eta(t)=F_e(t)/F_m(t)$进行截尾处理。分别删除两端1\%、2\%、5\%和10\%的极端值后，计算均值和中位数，结果如表\ref{tab:problem3_trim}所示。
+
+\begin{table}[htbp]
+\centering
+\caption{瞬时功率放大系数截尾统计结果}
+\label{tab:problem3_trim}
+\begin{tabular}{c c c c c}
+\hline
+两端截尾比例 & 有效样本数 & $\eta$均值 & $\eta$中位数 & $\eta$标准差 \\
+\hline
+0 & 100000 & 0.71384 & 0.71275 & 0.053466 \\
+1\% & 98000 & 0.71309 & 0.71275 & 0.017641 \\
+2\% & 96000 & 0.71306 & 0.71275 & 0.016733 \\
+5\% & 90000 & 0.71301 & 0.71275 & 0.014760 \\
+10\% & 80000 & 0.71295 & 0.71275 & 0.012340 \\
+\hline
+\end{tabular}
+\end{table}
+
+由表\ref{tab:problem3_trim}可知，即使剔除瞬时$\eta(t)$的极端值，均值和中位数仍稳定在$0.713$附近，且均小于正常下限$0.8$。同时，截尾后标准差明显减小，说明局部尖峰并未改变故障判定结论。
+
+\paragraph{（5）综合稳健性检验}
+
+最后，同时剔除边界样本和首尾端点，重新估计$\eta$。结果如表\ref{tab:problem3_comprehensive}所示。
+
+\begin{table}[htbp]
+\centering
+\caption{综合稳健性检验结果}
+\label{tab:problem3_comprehensive}
+\begin{tabular}{c c c c c}
+\hline
+最大悬浮间隙阈值/m & 首尾删除时间/s & 有效样本数 & $\hat{\eta}$ & 相对RMSE \\
+\hline
+0.0599 & 0.10 & 98000 & 0.71199 & 2.5888\% \\
+0.0599 & 0.20 & 96000 & 0.71199 & 2.5825\% \\
+0.0595 & 0.10 & 98000 & 0.71199 & 2.5888\% \\
+0.0595 & 0.20 & 96000 & 0.71199 & 2.5825\% \\
+0.0590 & 0.10 & 98000 & 0.71199 & 2.5888\% \\
+0.0590 & 0.20 & 96000 & 0.71199 & 2.5825\% \\
+\hline
+\end{tabular}
+\end{table}
+
+综合检验结果表明，在同时删除边界样本和端点样本后，$\hat{\eta}$仍稳定在$0.71199$左右，明显低于正常下限$0.8$。因此，功率放大器衰减型故障判定具有较好的鲁棒性。
+
+\subsubsection{故障判定}
+
+根据题目给出的判定标准，功率放大器正常波动范围为
+\[
+\eta\in[0.8,1.2].
+\]
+
+本文主要估计值为
+\[
+\hat{\eta}\approx0.71199.
+\]
+
+由于
+\[
+0.71199<0.8,
+\]
+说明实际总电磁力相对于理想总电磁力存在明显衰减。衰减比例约为
+\[
+1-\hat{\eta}=1-0.71199=0.28801.
+\]
+
+即实际总电磁力相对于理想总电磁力整体衰减约
+\[
+28.80\%.
+\]
+
+该衰减幅度已经超过题目规定的20\%正常波动范围。因此，可判定：
+\begin{center}
+\textbf{整列车悬浮系统存在功率放大器整体衰减型故障。}
+\end{center}
+
+
+\subsubsection{问题三结论}
+
+综上，本文在全车16台电磁铁功率放大系数完全相同且固定不变的假设下，先由问题一电磁力模型计算理想总电磁力$F_m(t)$，再由车体--悬浮架垂向动力学方程反演实际总电磁力$F_e(t)$，并通过零截距最小二乘法估计统一功率放大系数$\eta$。
+
+计算结果表明，全样本估计值为
+\[
+\hat{\eta}_{all}=0.7071311922,
+\]
+剔除首尾端点误差后的主要估计值为
+\[
+\boxed{
+\hat{\eta}\approx0.71199
+}
+\]
+
+该值明显小于正常范围下限$0.8$，表明实际总电磁力相对于理想总电磁力整体衰减约
+\[
+28.80\%.
+\]
+
+同时，平滑窗口敏感性分析、边界样本剔除、首尾端点剔除、瞬时功率放大系数截尾统计和综合稳健性检验均表明，估计结果稳定低于 $0.8$。因此，问题三最终判定为：
+\begin{center}
+\textbf{整列车悬浮系统存在功率放大器整体衰减型故障。}
+\end{center}
+
+\begin{table}[htbp]
+\centering
+\caption{问题三所采用模型汇总}
+\label{tab:problem3_model_summary}
+\begin{tabular}{p{0.20\textwidth} p{0.38\textwidth} p{0.32\textwidth}}
+\hline
+模型/方法 & 数学形式 & 用途说明 \\
+\hline
+理想电磁力模型 
+& $F_{m,i}(t)=0.0800\dfrac{I_i(t)|I_i(t)|}{z^2(t)}$ 
+& 计算第$i$台电磁铁的理想电磁力 \\
+
+理想总电磁力 
+& $F_m(t)=\sum_{i=1}^{16}F_{m,i}(t)$ 
+& 计算16台电磁铁的理想总电磁力 \\
+
+实际总电磁力反演 
+& $F_e(t)=431200+33000\ddot{z}_c(t)-11000\ddot{z}(t)$ 
+& 由动力学方程反演实际总电磁力 \\
+
+功率放大系数估计 
+& $\hat{\eta}=\dfrac{\sum F_m(t_j)F_e(t_j)}{\sum F_m^2(t_j)}$ 
+& 估计统一功率放大系数 \\
+
+阈值判别 
+& $\eta\in[0.8,1.2]$ 
+& 判断功率放大器是否发生故障 \\
+
+稳健性检验 
+& 平滑窗口、边界样本、端点样本和截尾统计 
+& 验证故障判定结果稳定性 \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{问题四：时变独立功率放大系数的故障检测}
+
+\subsubsection{问题四的可辨识性分析}
+
+问题四中，16台悬浮电磁铁的功率放大系数会随时间变化且互不相关。设第 $i$ 台电磁铁在时刻 $t$ 的理想电磁力为 $F_{m,i}(t)$，对应功率放大系数为 $\eta_i(t)$，则整车实际总电磁力可表示为
+\begin{equation}
+F_e(t)=\sum_{i=1}^{16}\eta_i(t)F_{m,i}(t)+e(t),
+\end{equation}
+其中，$e(t)$ 为残差项。
+
+在单个时刻 $t$，该式只有一个实际总电磁力观测值 $F_e(t)$，但未知量为
+\[
+\eta_1(t),\eta_2(t),\cdots,\eta_{16}(t),
+\]
+共16个。因此，在不加入额外假设的情况下，无法由附件4的数据唯一反演每一台电磁铁真实的瞬时功率放大系数 $\eta_i(t)$。
+
+为解决这一问题，本文采用短时间窗口近似思想。即在一个较短时间窗口内，认为各电磁铁的功率放大系数近似不变：
+\begin{equation}
+\eta_i(t)\approx \eta_i^{(w)}.
+\end{equation}
+
+这样，在一个窗口内可以利用大量采样点建立超定方程组，从而估计该窗口内16台电磁铁的等效功率放大系数。需要说明的是，本文估计得到的 $\eta_i$ 是窗口平均意义下的等效功率放大系数，而不是单个时刻严格唯一反演得到的真实瞬时值。
+
+\subsubsection{实际总电磁力与理想电磁力计算}
+
+与问题三相同，附件4未直接给出每台电磁铁的实际电磁力，因此首先由车体--悬浮架动力学方程反演整车实际总电磁力：
+\begin{equation}
+F_e(t)=431200+33000\ddot{z}_c(t)-11000\ddot{z}(t),
+\end{equation}
+其中，$\ddot{z}_c(t)$ 为附件4中给出的车体垂向加速度，$\ddot{z}(t)$ 为悬浮间隙 $z(t)$ 平滑后计算得到的二阶导数。
+
+另一方面，根据问题一建立的单个电磁铁电磁力模型，第 $i$ 台电磁铁在时刻 $t$ 的理想电磁力为
+\begin{equation}
+F_{m,i}(t)=0.0800\frac{I_i(t)|I_i(t)|}{z^2(t)}.
+\end{equation}
+
+因此，16台电磁铁的理想总电磁力为
+\begin{equation}
+F_m(t)=\sum_{i=1}^{16}F_{m,i}(t).
+\end{equation}
+
+附件4中共得到有效样本 $100000$ 组，时间范围为 $0s\sim9.9999s$。其中，悬浮间隙范围为 $0.03410973m\sim0.06000000m$，电流范围为 $9.800230A\sim93.005380A$。将上述数据代入动力学反演公式，得到附件4对应的实际总电磁力均值为
+\begin{equation}
+\overline{F_e}=431053.6483N.
+\end{equation}
+
+该均值与系统静态平衡重力 $431200N$ 十分接近，说明附件4中实际总电磁力在整体量级上与悬浮系统重量相匹配，可作为后续功率放大系数分析和故障定位的基础。
+
+\subsubsection{整体加权功率放大系数分析}
+
+首先定义整车层面的整体加权功率放大系数为
+\begin{equation}
+\rho(t)=\frac{F_e(t)}{F_m(t)}.
+\end{equation}
+
+由
+\begin{equation}
+F_e(t)=\sum_{i=1}^{16}\eta_i(t)F_{m,i}(t)
+\end{equation}
+可知：
+\begin{equation}
+\rho(t)=
+\frac{\sum_{i=1}^{16}\eta_i(t)F_{m,i}(t)}
+{\sum_{i=1}^{16}F_{m,i}(t)}.
+\end{equation}
+
+因此，$\rho(t)$ 是16台电磁铁功率放大系数按照理想电磁力加权后的整体平均值，只能反映整车总电磁力层面的整体异常，不能直接定位单个电磁铁故障。
+
+删除首尾 $0.50s$ 的端点数据后，计算得到：
+\[
+\rho_{\mathrm{mean}}=0.983498,
+\]
+\[
+\rho_{\mathrm{median}}=0.984329,
+\]
+\[
+\rho_{\min}=0.823764,\qquad \rho_{\max}=1.121084.
+\]
+
+整体越界比例为
+\[
+0.0000\%.
+\]
+
+整体加权功率放大系数随时间变化如图 \ref{fig:q4_rho} 所示。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.88\textwidth]{question_501.png}
+    \caption{整体加权功率放大系数随时间变化}
+    \label{fig:q4_rho}
+\end{figure}
+
+由图 \ref{fig:q4_rho} 可知，除初始短时波动外，$\rho(t)$ 始终位于正常区间 $[0.8,1.2]$ 内，且均值接近1。这说明从整车总电磁力层面看，附件4中不存在整体性的功率放大器故障。但是，整体正常并不代表每台电磁铁均正常，因为部分电磁铁衰减、部分电磁铁突增时，其对总电磁力的影响可能相互抵消。因此，还需要进一步估计单电磁铁的等效功率放大系数。
+
+\subsubsection{滑动窗口正则回归模型}
+
+在一个滑动时间窗口内，假设16台电磁铁的功率放大系数近似不变。设该窗口内实际总电磁力向量为
+\begin{equation}
+\mathbf{F}_e=
+\begin{bmatrix}
+F_e(t_1)\\
+F_e(t_2)\\
+\vdots\\
+F_e(t_N)
+\end{bmatrix}.
+\end{equation}
+
+构造理想电磁力矩阵：
+\begin{equation}
+\mathbf{A}=
+\begin{bmatrix}
+F_{m,1}(t_1) & F_{m,2}(t_1) & \cdots & F_{m,16}(t_1)\\
+F_{m,1}(t_2) & F_{m,2}(t_2) & \cdots & F_{m,16}(t_2)\\
+\vdots & \vdots & \ddots & \vdots\\
+F_{m,1}(t_N) & F_{m,2}(t_N) & \cdots & F_{m,16}(t_N)
+\end{bmatrix}.
+\end{equation}
+
+窗口内16台电磁铁的等效功率放大系数向量为
+\begin{equation}
+\boldsymbol{\eta}=
+[\eta_1,\eta_2,\cdots,\eta_{16}]^T.
+\end{equation}
+
+则窗口内模型可写为
+\begin{equation}
+\mathbf{F}_e=\mathbf{A}\boldsymbol{\eta}+\mathbf{e}.
+\end{equation}
+
+由于不同电磁铁电流序列之间可能存在相关性，直接最小二乘估计容易不稳定。因此，本文加入以正常状态 $\boldsymbol{\eta}=\mathbf{1}$ 为先验的正则项，建立优化模型：
+\begin{equation}
+\min_{\boldsymbol{\eta}}
+\left\|\mathbf{A}\boldsymbol{\eta}-\mathbf{F}_e\right\|^2
++\lambda\left\|\boldsymbol{\eta}-\mathbf{1}\right\|^2.
+\end{equation}
+
+对目标函数求导，可得解析解：
+\begin{equation}
+\hat{\boldsymbol{\eta}}
+=
+(\mathbf{A}^T\mathbf{A}+\lambda\mathbf{I})^{-1}
+(\mathbf{A}^T\mathbf{F}_e+\lambda\mathbf{1}).
+\end{equation}
+
+本文取滑动窗口长度为
+\[
+0.80s,
+\]
+滑动步长为
+\[
+0.05s.
+\]
+
+正则参数取
+\[
+\lambda=0.01\overline{\operatorname{diag}(\mathbf{A}^T\mathbf{A})},
+\]
+其中，$\overline{\operatorname{diag}(\mathbf{A}^T\mathbf{A})}$ 表示矩阵 $\mathbf{A}^T\mathbf{A}$ 对角元素的平均值。
+
+功率放大系数正常范围为
+\[
+\eta_i\in[0.8,1.2].
+\]
+
+因此，本文采用如下判据：
+\[
+\eta_i<0.8
+\quad\Rightarrow\quad
+\text{第 }i\text{ 台电磁铁为衰减型故障},
+\]
+\[
+\eta_i>1.2
+\quad\Rightarrow\quad
+\text{第 }i\text{ 台电磁铁为突增型故障}.
+\]
+
+为避免瞬时波动导致误判，要求异常状态持续时间不少于
+\[
+0.50s.
+\]
+
+\subsubsection{滑动窗口回归结果}
+
+采用上述滑动窗口正则回归模型进行估计，共得到 $164$ 个有效窗口。窗口回归平均误差为
+\[
+RMSE=11531.1498N.
+\]
+
+平均相对均方根误差为
+\[
+RMSE_{rel}=2.6739\%.
+\]
+
+窗口条件数中位数为
+\[
+2.5299\times 10^2.
+\]
+
+这说明回归矩阵存在一定相关性，但在加入正则化处理后，模型仍能较好拟合实际总电磁力。
+
+滑动窗口估计得到的单电磁铁功率放大系数热力图如图 \ref{fig:q4_eta_heatmap} 所示。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.88\textwidth]{question_502.png}
+    \caption{滑动窗口估计的单电磁铁功率放大系数热力图}
+    \label{fig:q4_eta_heatmap}
+\end{figure}
+
+由图 \ref{fig:q4_eta_heatmap} 可直观看出，异常主要集中在两个时间段：约 $3s\sim5s$ 和约 $7s\sim9s$。其中，蓝色区域表示功率放大系数偏小，对应衰减型异常；红色区域表示功率放大系数偏大，对应突增型异常。
+
+各电磁铁窗口估计值统计如表 \ref{tab:q4_eta_stat} 所示。
+
+\begin{table}[htbp]
+\centering
+\caption{各电磁铁滑动窗口估计值统计}
+\label{tab:q4_eta_stat}
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{c c c c}
+\toprule
+电磁铁编号 & $\eta$均值 & $\eta$最小值 & $\eta$最大值 \\
+\midrule
+1  & 0.90968 & 0.74588 & 1.0117 \\
+2  & 0.88732 & 0.63055 & 1.0341 \\
+3  & 0.82913 & 0.63008 & 1.0168 \\
+4  & 1.0046  & 0.90076 & 1.1305 \\
+5  & 1.0312  & 0.97340 & 1.1654 \\
+6  & 0.9412  & 0.86812 & 1.0170 \\
+7  & 1.1032  & 0.98616 & 1.3520 \\
+8  & 1.0154  & 0.94962 & 1.1010 \\
+9  & 1.0146  & 0.90999 & 1.1359 \\
+10 & 1.0361  & 0.99260 & 1.0825 \\
+11 & 1.0218  & 0.97007 & 1.0936 \\
+12 & 0.97858 & 0.90571 & 1.0253 \\
+13 & 0.98550 & 0.91431 & 1.0232 \\
+14 & 0.90644 & 0.69470 & 1.0319 \\
+15 & 1.1197  & 0.96289 & 1.4351 \\
+16 & 1.2104  & 0.97028 & 1.6203 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+由表 \ref{tab:q4_eta_stat} 可知，编号 $1,2,3,14$ 的电磁铁在部分时间段内 $\eta_i<0.8$，表现为衰减型异常；编号 $7,15,16$ 的电磁铁在部分时间段内 $\eta_i>1.2$，表现为突增型异常。
+
+\subsubsection{故障电磁铁编号与故障时间段}
+
+根据滑动窗口正则回归结果，得到故障检测结果如表 \ref{tab:q4_fault_result} 所示。
+
+\begin{table}[htbp]
+\centering
+\caption{问题四单电磁铁故障检测结果}
+\label{tab:q4_fault_result}
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{c c c c c c c}
+\toprule
+电磁铁编号 & 故障开始/s & 故障结束/s & 持续时间/s & 平均$\eta_i$ & 中位$\eta_i$ & 故障类型 \\
+\midrule
+3  & 2.35 & 5.70 & 3.35 & 0.74978 & 0.71014 & 衰减型 \\
+14 & 2.85 & 5.40 & 2.55 & 0.76434 & 0.77338 & 衰减型 \\
+16 & 2.85 & 5.10 & 2.25 & 1.4164  & 1.5917  & 突增型 \\
+15 & 2.90 & 5.10 & 2.20 & 1.3069  & 1.3967  & 突增型 \\
+1  & 3.00 & 5.00 & 2.00 & 0.78508 & 0.76619 & 衰减型 \\
+7  & 3.00 & 5.10 & 2.10 & 1.2610  & 1.3115  & 突增型 \\
+2  & 6.30 & 9.45 & 3.15 & 0.71456 & 0.68258 & 衰减型 \\
+16 & 6.35 & 9.45 & 3.10 & 1.2662  & 1.2940  & 突增型 \\
+3  & 6.50 & 9.45 & 2.95 & 0.79360 & 0.77758 & 衰减型 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+由于滑动窗口长度为 $0.80s$，故障起止时间会受到窗口半宽影响。因此，从整体时间段上看，附件4中主要存在两个故障区间。
+
+第一故障区间约为
+\[
+3s\sim5s.
+\]
+
+该区间内故障电磁铁为
+\[
+1,\ 3,\ 7,\ 14,\ 15,\ 16.
+\]
+
+其中，
+\[
+1,\ 3,\ 14
+\]
+为衰减型故障；
+\[
+7,\ 15,\ 16
+\]
+为突增型故障。
+
+第二故障区间约为
+\[
+7s\sim9s.
+\]
+
+该区间内故障电磁铁为
+\[
+2,\ 3,\ 16.
+\]
+
+其中，
+\[
+2,\ 3
+\]
+为衰减型故障；
+\[
+16
+\]
+为突增型故障。
+
+其中，第16号电磁铁在两个故障区间内均表现为突增型故障，是异常最明显且重复出现的电磁铁；第3号电磁铁在两个故障区间内均表现为衰减型故障，其中第二段平均 $\eta=0.79360$，接近阈值0.8，可视为轻度衰减异常。
+
+为了展示故障电磁铁在时序曲线中的越界情况，绘制16台电磁铁相对等效功率放大系数时序曲线，如图 \ref{fig:q4_eta_curve} 所示。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.90\textwidth]{question_503.png}
+    \caption{16台电磁铁相对等效功率放大系数时序曲线}
+    \label{fig:q4_eta_curve}
+\end{figure}
+
+由图 \ref{fig:q4_eta_curve} 可知，正常时段内各电磁铁的功率放大系数主要围绕 $\eta=1$ 附近波动；在 $3s\sim5s$ 和 $7s\sim9s$ 两个时间段内，部分曲线明显越过故障阈值线。其中，低于下阈值 $0.8$ 的曲线对应衰减型故障，高于上阈值 $1.2$ 的曲线对应突增型故障。
+
+为了更加直观地展示故障电磁铁编号及其对应故障时间段，本文将滑动窗口正则回归得到的故障检测结果绘制成甘特图。图中横轴表示时间，纵轴表示电磁铁编号，红色条带表示衰减型故障，蓝色条带表示突增型故障。由图 \ref{fig:q4_fault_gantt} 可知，故障在时间上呈现明显聚集特征：$3s\sim5s$ 内同时存在多个衰减型和突增型故障；$7s\sim9s$ 内故障数量减少，但仍存在 $2$、$3$、$16$ 号电磁铁异常，其中 $16$ 号电磁铁再次出现突增型异常，说明其故障具有重复出现特征。
+
+\FloatBarrier
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{question_504.png}
+    \caption{问题四单电磁铁故障瞬时段定位}
+    \label{fig:q4_fault_gantt}
+\end{figure}
+\FloatBarrier
+
+\subsubsection{相对特征法辅助验证}
+
+为进一步验证故障定位结果，本文构造相对特征法作为辅助检验。
+
+定义第 $i$ 台电磁铁的理想力特征为
+\begin{equation}
+r_i(t)=\frac{I_i^2(t)}{z^2(t)}.
+\end{equation}
+
+为削弱悬浮间隙和整体工况变化对所有电磁铁的共同影响，对其取对数，并以同一时刻剔除自身外其余15台电磁铁的中位数作为参照，构造相对特征：
+\begin{equation}
+e_i(t)=\log r_i(t)-\operatorname{median}_{j\neq i}\{\log r_j(t)\}.
+\end{equation}
+
+定义相对等效功率放大指标为
+\begin{equation}
+\tilde{\eta}_i(t)=\exp[-e_i(t)].
+\end{equation}
+
+若
+\[
+\tilde{\eta}_i(t)<0.8,
+\]
+则判定为衰减型故障；若
+\[
+\tilde{\eta}_i(t)>1.2,
+\]
+则判定为突增型故障。
+
+相对特征法得到的故障结果如表 \ref{tab:q4_relative_result} 所示。
+
+\begin{table}[htbp]
+\centering
+\caption{相对特征法辅助验证结果}
+\label{tab:q4_relative_result}
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{c c c c}
+\toprule
+电磁铁编号 & 故障时间段/s & 平均等效$\tilde{\eta}_i$ & 故障类型 \\
+\midrule
+16 & 2.9805--5.0196 & 2.0018  & 突增型 \\
+3  & 2.9825--5.0081 & 0.61058 & 衰减型 \\
+14 & 3.0011--5.0004 & 0.65336 & 衰减型 \\
+15 & 3.0018--5.0011 & 1.5424  & 突增型 \\
+1  & 3.0069--5.0047 & 0.68805 & 衰减型 \\
+7  & 3.0138--5.0014 & 1.4428  & 突增型 \\
+2  & 6.9990--9.0014 & 0.65535 & 衰减型 \\
+16 & 7.0030--8.9908 & 1.4373  & 突增型 \\
+3  & 7.3649--8.9701 & 0.74710 & 衰减型 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+可以看出，相对特征法检测出的故障编号为
+\[
+1,\ 2,\ 3,\ 7,\ 14,\ 15,\ 16,
+\]
+与滑动窗口正则回归法完全一致。两种方法在故障类型和主要故障时间段上也高度一致，说明故障定位结果具有较好的可靠性。
+
+\subsubsection{正则强度敏感性分析}
+
+为检验滑动窗口正则回归结果对正则参数的敏感性，本文分别取不同正则强度进行检测，结果如表 \ref{tab:q4_alpha} 所示。
+
+\begin{table}[htbp]
+\centering
+\caption{正则强度敏感性分析}
+\label{tab:q4_alpha}
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{c c}
+\toprule
+正则强度 $\alpha$ & 检测到的故障电磁铁编号 \\
+\midrule
+0.001 & 1,2,3,7,14,15,16 \\
+0.003 & 1,2,3,7,14,15,16 \\
+0.010 & 1,2,3,7,14,15,16 \\
+0.030 & 1,2,3,7,14,15,16 \\
+0.100 & 2,3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+由表 \ref{tab:q4_alpha} 可知，当正则强度处于 $0.001\sim0.03$ 的合理范围内时，检测到的故障电磁铁编号均为
+\[
+\{1,2,3,7,14,15,16\}.
+\]
+
+这说明故障定位结果对正则参数不敏感，具有较好的稳定性。当正则强度增大到0.1时，正则项过强，会将部分异常 $\eta_i$ 强行拉回正常值1附近，导致部分突增或衰减故障被掩盖。因此，本文选择 $\alpha=0.01$ 作为主计算参数。
+
+\subsubsection{问题四结论}
+
+综上，问题四中16台电磁铁的功率放大系数随时间变化且互不相关，单个时刻无法唯一反演每台电磁铁的真实瞬时功率放大系数。本文在短时间窗口内假设功率放大系数近似不变，采用滑动窗口正则回归估计窗口平均意义下的等效功率放大系数，并以相对特征法作为辅助验证。
+
+计算结果表明，整车整体加权功率放大系数 $\rho(t)$ 始终位于 $[0.8,1.2]$ 内，说明整车总电磁力层面不存在整体性功率放大器故障。但局部电磁铁存在明显故障，故障电磁铁编号为
+\[
+\boxed{1,\ 2,\ 3,\ 7,\ 14,\ 15,\ 16}.
+\]
+
+其中，衰减型故障电磁铁为
+\[
+\boxed{1,\ 2,\ 3,\ 14},
+\]
+突增型故障电磁铁为
+\[
+\boxed{7,\ 15,\ 16}.
+\]
+
+主要故障时间段为
+\begin{center}
+\fbox{
+\begin{minipage}{0.82\textwidth}
+\centering
+$3s\sim5s$：$1,3,14$ 号电磁铁衰减，$7,15,16$ 号电磁铁突增。
+\end{minipage}
+}
+\end{center}
+
+\begin{center}
+\fbox{
+\begin{minipage}{0.82\textwidth}
+\centering
+$7s\sim9s$：$2,3$ 号电磁铁衰减，$16$ 号电磁铁突增。
+\end{minipage}
+}
+\end{center}
+
+因此，问题四最终判定为：
+\begin{center}
+\fbox{
+\begin{minipage}{0.82\textwidth}
+\centering
+附件4中不存在整车整体性功率放大器故障，\\
+但存在多个单电磁铁局部功率放大器故障。
+\end{minipage}
+}
+\end{center}
+
+其中，第16号电磁铁重复出现突增型故障，第3号电磁铁重复出现衰减型故障，应作为重点排查对象。
+
+\begin{table}[htbp]
+\centering
+\caption{问题四所采用模型汇总}
+\label{tab:q4_model_summary}
+\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{p{3.1cm} p{5.8cm} p{5.6cm}}
+\toprule
+模型/方法 & 数学形式 & 用途说明 \\
+\midrule
+实际总电磁力反演
+& $F_e(t)=431200+33000\ddot{z}_c(t)-11000\ddot{z}(t)$
+& 由车体加速度和悬浮间隙二阶导数反演实际总电磁力 \\
+
+理想电磁力模型
+& $F_{m,i}(t)=0.0800\dfrac{I_i(t)|I_i(t)|}{z^2(t)}$
+& 计算第$i$台电磁铁的理想电磁力 \\
+
+整体加权功率放大系数
+& $\rho(t)=\dfrac{F_e(t)}{F_m(t)}$
+& 判断整车总电磁力层面是否存在整体性异常 \\
+
+滑动窗口正则回归
+& $\min\|\mathbf{A}\boldsymbol{\eta}-\mathbf{F}_e\|^2+\lambda\|\boldsymbol{\eta}-\mathbf{1}\|^2$
+& 估计窗口平均意义下的单电磁铁等效功率放大系数 \\
+
+相对特征
+& $e_i(t)=\log r_i(t)-\operatorname{median}_{j\neq i}\{\log r_j(t)\}$
+& 消除整体工况影响，提取单电磁铁相对异常 \\
+
+相对等效功率放大指标
+& $\tilde{\eta}_i(t)=\exp[-e_i(t)]$
+& 辅助验证单电磁铁故障定位结果 \\
+
+故障判据
+& $\eta_i<0.8$，$\eta_i>1.2$
+& 分别判定衰减型故障和突增型故障 \\
+
+持续时间约束
+& $\Delta t\geq0.50s$
+& 排除瞬时噪声导致的误判 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\section{模型的评价与推广}
+
+\subsection{模型优点}
+
+本文围绕抱轨式磁浮列车悬浮电磁铁故障检测问题，建立了“电磁力辨识--垂向动力学建模--功率放大系数反演--单电磁铁故障定位”的完整建模流程。题目各问之间具有较强递进关系，问题一得到的电磁力模型为后续理想电磁力计算提供基础，问题二建立的垂向动力学模型为问题三和问题四中的实际总电磁力反演提供依据，问题三和问题四则进一步完成整车层面和单电磁铁层面的功率放大器故障检测。
+
+首先，本文建立的单电磁铁电磁力模型具有明确的物理意义。由电磁悬浮理论可知，电磁力与电流平方成正比、与悬浮间隙平方成反比；同时，题目说明电磁力方向与电流正负方向有关。因此，本文采用有符号平方反比模型
+\begin{equation}
+F=K_0\frac{I|I|}{z^2}+\varepsilon.
+\end{equation}
+该模型既保留了经典电磁力模型的平方反比结构，又能够反映电流方向对电磁力方向的影响，避免了单纯使用$I^2$导致方向信息丢失的问题，具有较好的物理解释性和计算稳定性。
+
+其次，本文在问题二中建立了车体--悬浮架二自由度垂向动力学模型，能够较好描述车体、悬浮架、空气弹簧、电磁力和重力之间的耦合关系。模型将16台电磁铁总电磁力作为外部输入，并根据题目给出的悬浮间隙物理限制进一步引入约束条件
+\begin{equation}
+0\leq z_{\mathrm{gap}}(t)\leq 0.06\,m.
+\end{equation}
+通过自由动力学模型、下轨约束模型和完整硬约束模型的比较，说明完整硬约束模型更符合悬浮间隙作为几何距离的物理含义，避免了负悬浮间隙或超过最大悬浮间隙等非物理结果。
+
+再次，问题三中采用动力学反演与最小二乘估计相结合的方法，在附件3未直接给出实际电磁力的情况下，先由车体加速度和悬浮间隙二阶导数反演实际总电磁力，再利用问题一模型计算理想总电磁力，建立零截距回归模型
+\begin{equation}
+F_e(t)=\eta F_m(t)+e(t).
+\end{equation}
+由此得到统一功率放大系数的闭式估计式
+\begin{equation}
+\hat{\eta}=
+\frac{\sum_{j=1}^{n}F_m(t_j)F_e(t_j)}
+{\sum_{j=1}^{n}F_m^2(t_j)}.
+\end{equation}
+同时，本文进一步进行了平滑窗口、端点剔除、边界样本剔除和瞬时系数统计等稳健性检验，所得$\eta$稳定低于正常区间下限$0.8$，说明故障判定不依赖于单一参数设置，具有较好的鲁棒性。
+
+最后，问题四正面处理了16台电磁铁功率放大系数时变且互不相关所带来的欠定问题。由于每一时刻只有一个实际总电磁力观测值，而未知量为16个$\eta_i(t)$，真实的单台电磁铁功率放大系数不能唯一反演。因此，本文先用整体加权功率放大系数
+\begin{equation}
+\rho(t)=\frac{F_e(t)}{F_m(t)}
+\end{equation}
+判断整车层面是否存在整体异常，再构造相对特征
+\begin{equation}
+e_i(t)=\log r_i(t)-\operatorname{median}_{j\ne i}\{\log r_j(t)\},
+\end{equation}
+以及相对等效功率放大指标
+\begin{equation}
+\tilde{\eta}_i(t)=\exp[-e_i(t)].
+\end{equation}
+该方法通过“剔除自身后的中位数”削弱共同工况变化的影响，并结合持续时间约束和阈值敏感性分析完成单电磁铁故障定位，具有较好的鲁棒性和可解释性。
+
+\subsection{模型局限}
+
+尽管本文模型能够较好完成题目要求，但仍存在以下不足。
+
+第一，问题一采用的电磁力模型属于平方反比形式，主要通过单一比例系数$K_0$吸收磁路结构、线圈参数、铁磁材料性质等综合影响。该模型结构简单，物理意义明确，但没有显式考虑磁饱和、漏磁、边缘磁通和温度变化等因素。在大电流或小悬浮间隙工况下，磁路非线性可能增强，平方反比模型的局部误差可能增大。
+
+第二，问题二仅考虑车体和悬浮架在垂向方向上的一维运动，忽略了滚转、俯仰、偏航和横向动力学干扰。虽然题目要求研究单节车体垂向一维运动，并且该简化能够降低建模复杂度，但实际列车运行中左右两侧电磁铁受力不均可能引起俯仰或滚转，进而影响局部悬浮间隙。
+
+第三，问题二中采用硬约束投影处理悬浮间隙边界。该方法能够保证计算结果满足
+\[
+0\leq z_{\mathrm{gap}}(t)\leq 0.06\,m,
+\]
+但它将轨道接触过程简化为完全非弹性限位，未进一步描述接触冲击、局部弹性变形和能量耗散等细节。因此，该模型适合计算悬浮间隙的宏观变化，但对真实接触过程的描述仍较粗略。
+
+第四，问题三和问题四均需要对悬浮间隙进行平滑和二阶微分。二阶微分对噪声较为敏感，若实际传感器噪声较大，可能放大高频误差，影响反演得到的实际总电磁力。因此，本文通过平滑窗口和端点剔除降低误差，但仍无法完全避免微分噪声带来的影响。
+
+第五，问题四中的$\tilde{\eta}_i(t)$是相对等效功率放大指标，而不是单台电磁铁真实功率放大系数$\eta_i(t)$的唯一反演值。由于问题四在单个时刻本质上是一个方程对应16个未知量，真实$\eta_i(t)$不具备唯一可辨识性。因此，本文方法更适合用于故障定位和故障类型判断，而不适合直接作为单台电磁铁功率放大系数的精确物理测量值。
+
+\subsection{模型推广}
+
+本文模型可从以下几个方面进行推广。
+
+首先，问题一的电磁力模型可进一步推广为含气隙修正项或磁饱和修正项的非线性模型。例如，可将模型改写为
+\begin{equation}
+F=K_0\frac{I|I|}{(z+\delta)^2},
+\end{equation}
+其中，$\delta$用于修正传感器零点偏差、等效气隙偏差或边缘磁通影响。也可以根据电流大小和悬浮间隙区间建立分段平方反比模型，以提高大电流、小间隙区域的拟合精度。
+
+其次，问题二中的二自由度垂向模型可推广为多自由度车辆动力学模型。在实际列车中，左右两侧电磁铁分布于悬浮架两侧，若考虑不同电磁铁受力不均，则可引入车体俯仰、滚转自由度，建立车体--悬浮架--轨道之间的多自由度耦合动力学模型。这样可以更真实地描述局部电磁铁故障对车体姿态和各处悬浮间隙的影响。
+
+再次，问题三中的统一功率放大系数估计可推广为递推估计模型。若在线实时采集悬浮间隙、车体加速度和电磁铁电流数据，可以使用递推最小二乘或Kalman滤波方法动态更新$\eta(t)$，从而实现功率放大器健康状态的在线监测。
+
+最后，问题四中的相对等效指标可与机器学习异常检测方法结合。本文采用阈值判别和持续时间约束实现故障定位，后续可进一步结合孤立森林、One-Class SVM、隐马尔可夫模型或贝叶斯变点检测方法，对复杂噪声背景下的早期弱故障进行识别，提高故障检测的实时性和灵敏度。
+
+\section{模型的改进}
+
+\subsection{电磁力模型的改进}
+
+本文在问题一中采用有符号平方反比模型
+\begin{equation}
+F=K_0\frac{I|I|}{z^2}+\varepsilon.
+\end{equation}
+该模型结构简单，参数估计稳定，且能够较好描述电磁力与电流、悬浮间隙之间的主要关系。但从残差结果看，模型仍存在一定随机波动，说明实际电磁铁系统中可能包含磁饱和、边缘磁通、漏磁以及传感器测量误差等因素。
+
+因此，后续可以从以下两个方向改进。
+
+第一，引入气隙修正参数：
+\begin{equation}
+F=K_0\frac{I|I|}{(z+\delta)^2}+\varepsilon.
+\end{equation}
+其中，$\delta$表示等效间隙修正量，用于补偿悬浮间隙传感器零点误差、磁路等效气隙偏差和边缘磁通影响。当$\delta=0$时，该模型退化为本文所采用的平方反比模型。
+
+第二，引入可变指数模型：
+\begin{equation}
+F=K\frac{|I|^p}{z^q}\operatorname{sgn}(I)+\varepsilon.
+\end{equation}
+其中，$p$和$q$分别表示电流和悬浮间隙的实际作用指数。若$p\approx2$、$q\approx2$，说明平方反比模型合理；若二者明显偏离2，则说明系统存在较强非理想效应。该模型可以作为问题一的进一步精细化版本，但参数更多，可能会降低模型的简洁性和稳定性。因此，本文仍采用物理意义更明确的单参数平方反比模型作为主模型。
+
+\subsection{垂向动力学模型的改进}
+
+本文在问题二中将车体和悬浮架简化为二自由度垂向系统，并采用完整硬约束保证悬浮间隙满足
+\begin{equation}
+0\leq z_{\mathrm{gap}}(t)\leq 0.06\,m.
+\end{equation}
+该方法能够避免自由模型中悬浮间隙超过最大值或出现负间隙的非物理现象。但硬约束投影本质上是一种理想边界处理，对真实轨道接触过程的描述仍然简化。
+
+后续可以从以下方面改进。
+
+第一，可采用罚函数接触模型代替硬投影模型。设当悬浮架触碰下轨或上轨时产生接触力：
+\begin{equation}
+F_{\mathrm{rail}}=-K_{\mathrm{rail}}\Delta z-C_{\mathrm{rail}}\Delta\dot{z},
+\end{equation}
+其中，$\Delta z$为穿透量，$K_{\mathrm{rail}}$为接触刚度，$C_{\mathrm{rail}}$为接触阻尼。该方法能够描述接触过程中的弹性恢复和能量耗散，比硬投影更接近实际接触过程。
+
+第二，可以引入轨道不平顺扰动。实际高速运行过程中，轨道不平顺会引起悬浮间隙变化，可将轨道基准面设为时变函数$z_r(t)$，使悬浮间隙变为
+\begin{equation}
+z_{\mathrm{gap}}(t)=z_r(t)+0.06-z_f(t).
+\end{equation}
+这样可以进一步分析轨道扰动对车体垂向响应和故障检测结果的影响。
+
+第三，可将二自由度模型推广为多自由度模型。若考虑车体俯仰、滚转和左右两侧电磁铁受力差异，则可建立包含车体垂向、俯仰、滚转以及悬浮架姿态的多自由度系统，从而更准确描述单个电磁铁故障对整车姿态的影响。
+
+\subsection{功率放大器故障检测模型的改进}
+
+本文在问题三中采用统一功率放大系数$\eta$的最小二乘反演方法，在问题四中采用相对等效功率放大指标$\tilde{\eta}_i(t)$进行单电磁铁故障定位。这两种方法均能满足题目要求，但仍有进一步改进空间。
+
+对于问题三，后续可采用递推最小二乘方法进行在线估计。设时刻$t_k$的模型为
+\begin{equation}
+F_e(t_k)=\eta(t_k)F_m(t_k)+e(t_k).
+\end{equation}
+若允许$\eta(t)$缓慢变化，则可用递推最小二乘实时更新估计值，从而不仅判断是否存在故障，还可以监测故障发生和发展的过程。
+
+对于问题四，由于真实$\eta_i(t)$在单个时刻不可唯一反演，本文采用相对等效指标进行故障定位。后续可以在短时间窗口内假设$\eta_i(t)$近似不变，建立滑动窗口回归模型：
+\begin{equation}
+\mathbf{F}_e=\mathbf{A}\boldsymbol{\eta}+\mathbf{e},
+\end{equation}
+其中，$\mathbf{A}$的第$i$列为窗口内第$i$台电磁铁的理想电磁力序列，$\boldsymbol{\eta}$为16台电磁铁的功率放大系数向量。由于不同电磁铁电流序列可能具有较强相关性，可加入岭正则化：
+\begin{equation}
+\hat{\boldsymbol{\eta}}
+=
+(\mathbf{A}^{T}\mathbf{A}+\lambda \mathbf{I})^{-1}\mathbf{A}^{T}\mathbf{F}_e.
+\end{equation}
+该方法可作为相对特征法的辅助验证手段，但由于回归矩阵可能存在共线性，估计结果稳定性需要进一步检验。
+
+此外，还可以引入多源信息融合方法，将电流、悬浮间隙、车体加速度、故障持续时间和左右侧电磁铁空间位置同时纳入检测模型。例如，可构建综合异常评分：
+\begin{equation}
+S_i(t)=w_1|\tilde{\eta}_i(t)-1|+w_2|\Delta e_i(t)|+w_3D_i(t),
+\end{equation}
+其中，$D_i(t)$表示异常持续时间特征，$w_1,w_2,w_3$为权重。该综合评分可以进一步提高弱故障和早期故障的识别能力。
+
+
+\newpage
+
+\begin{thebibliography}{99}
+\addcontentsline{toc}{section}{参考文献}
+
+\bibitem{1} 孙玺菁, 司守奎. 数学建模算法与应用: 第3版[M]. 北京: 国防工业出版社, 2024.
+
+\bibitem{2} HAN H S, KIM D S. Magnetic Levitation: Maglev Technology and Applications[M]. Dordrecht: Springer, 2016.
+
+\bibitem{3} SCHWEITZER G, MASLEN E H, eds. Magnetic Bearings: Theory, Design, and Application to Rotating Machinery[M]. Berlin: Springer, 2009.
+
+\bibitem{4} LI F X, SUN Y G, XU J Q, et al. Control Methods for Levitation System of EMS-Type Maglev Vehicles: An Overview[J]. Energies, 2023, 16(7): 2995.
+
+\bibitem{5} WU H, ZENG X H, GAO D G, et al. Dynamic stability of an electromagnetic suspension maglev vehicle under steady aerodynamic load[J]. Applied Mathematical Modelling, 2021, 97: 483-500.
+
+\bibitem{6} OGATA K. Modern Control Engineering[M]. 5th ed. Upper Saddle River: Prentice Hall, 2010.
+
+\bibitem{7} BURDEN R L, FAIRES J D, BURDEN A M. Numerical Analysis[M]. 10th ed. Boston: Cengage Learning, 2016.
+
+\bibitem{8} LAWSON C L, HANSON R J. Solving Least Squares Problems[M]. Philadelphia: Society for Industrial and Applied Mathematics, 1995.
+
+\bibitem{9} TIKHONOV A N. On the solution of ill-posed problems and the method of regularization[J]. Doklady Akademii Nauk SSSR, 1963, 151(3): 501-504.
+
+\bibitem{10} HANSEN P C. Rank-Deficient and Discrete Ill-Posed Problems: Numerical Aspects of Linear Inversion[M]. Philadelphia: Society for Industrial and Applied Mathematics, 1998.
+
+\bibitem{11} SAVITZKY A, GOLAY M J E. Smoothing and Differentiation of Data by Simplified Least Squares Procedures[J]. Analytical Chemistry, 1964, 36(8): 1627-1639.
+
+\bibitem{12} BISHOP C M. Pattern Recognition and Machine Learning[M]. New York: Springer, 2006.
+
+\end{thebibliography}
+
+\newpage
+
+\begin{appendices}
+
+\section*{}
+
+\textbf{\textcolor[rgb]{0.98,0.00,0.00}{程序一：MATLAB算道路车辆通行能力:}}
+\lstinputlisting[language=Matlab]{./code/mcmthesis-matlab1.m}
+
+\section*{}
+
+\textcolor[rgb]{0.98,0.00,0.00}{\textbf{程序二：C++ 求解路网正体影响度:}}
+\lstinputlisting[language=C++]{./code/mcmthesis-sudoku.cpp}
+
+\newpage
+\def\thesection{A}
+\renewcommand{\thetable}{\wuhao A-\arabic{table}}
+\setcounter{table}{0}
+\section*{数据表格}
+\textcolor[rgb]{0.98,0.00,0.00}{\textbf{表格数据：}}
+\input{Appendices1}
+
+\end{appendices}
+\end{document}
+
