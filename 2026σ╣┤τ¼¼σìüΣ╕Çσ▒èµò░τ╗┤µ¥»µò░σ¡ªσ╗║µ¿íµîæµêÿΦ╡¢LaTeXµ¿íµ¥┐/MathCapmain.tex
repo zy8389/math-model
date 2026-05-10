@@ -673,12 +673,30 @@ F_k=-k(z_c-z_f)-c(\dot{z}_c-\dot{z}_f).
 F_k=k(z_f-z_c)+c(\dot{z}_f-\dot{z}_c).
 \end{equation}
 
-其中，$k$为空气弹簧等效刚度，$c$为空气弹簧等效阻尼系数。根据题目给定参数，有
+其中，$k$为空气弹簧等效刚度，$c$为空气弹簧等效阻尼系数。根据题目给定参数，空气弹簧等效刚度和阻尼系数分别为
 \[
-k=2\times10^7N/m,
+k=2\times10^7\,\mathrm{N/m},
+\qquad
+c=8\times10^4\,\mathrm{N\cdot s/m}.
+\]
+
+又由 5.2.1 节可知，车体质量、悬浮架及 16 台电磁铁总质量分别为
+\[
+m_c=33000\,\mathrm{kg},
+\qquad
+m_f=11000\,\mathrm{kg}.
+\]
+
+取重力加速度
+\[
+g=9.8\,\mathrm{m/s^2},
+\]
+则车体重力和悬浮架系统重力分别为
+\[
+m_cg=33000\times9.8=323400\,\mathrm{N},
 \]
 \[
-c=8\times10^4N\cdot s/m.
+m_fg=11000\times9.8=107800\,\mathrm{N}.
 \]
 
 车体受到空气弹簧作用力和自身重力作用。根据牛顿第二定律，车体垂向运动方程为
@@ -686,16 +704,18 @@ c=8\times10^4N\cdot s/m.
 m_c\ddot{z}_c=k(z_f-z_c)+c(\dot{z}_f-\dot{z}_c)-m_cg.
 \end{equation}
 
-悬浮架受到电磁力、空气弹簧反作用力和自身重力作用，其垂向运动方程为
+悬浮架受到总电磁力、空气弹簧反作用力和自身重力作用，其垂向运动方程为
 \begin{equation}
 m_f\ddot{z}_f=F_e(t)-k(z_f-z_c)-c(\dot{z}_f-\dot{z}_c)-m_fg.
 \end{equation}
 
-将参数代入，可得
+将上述参数代入车体运动方程，可得
 \begin{equation}
 33000\ddot{z}_c
-=2\times10^7(z_f-z_c)+8\times10^4(\dot{z}_f-\dot{z}_c)-323400,
+=2\times10^7(z_f-z_c)+8\times10^4(\dot{z}_f-\dot{z}_c)-323400.
 \end{equation}
+
+将上述参数代入悬浮架运动方程，可得
 \begin{equation}
 11000\ddot{z}_f
 =F_e(t)-2\times10^7(z_f-z_c)-8\times10^4(\dot{z}_f-\dot{z}_c)-107800.
@@ -703,10 +723,9 @@ m_f\ddot{z}_f=F_e(t)-k(z_f-z_c)-c(\dot{z}_f-\dot{z}_c)-m_fg.
 
 其中，
 \begin{equation}
-F_e(t)=\sum_{i=1}^{16}F_i(t).
+F_e(t)=\sum_{i=1}^{16}F_i(t)
 \end{equation}
-
-由于附件2中的电磁力数据为离散时间序列，计算时对$F_e(t)$采用线性插值，使其作为微分方程连续时间输入。
+表示 16 台电磁铁对悬浮架产生的实际总电磁力。由于附件 2 中的电磁力数据为离散时间序列，计算时对 $F_e(t)$ 采用线性插值，使其作为微分方程的连续时间输入。
 
 \subsubsection{初始条件与悬浮间隙关系}
 
@@ -828,7 +847,7 @@ z_{\text{gap}}(t)=0.06-z_f(t),
 0\leq z_f(t)\leq0.06\,m.
 \end{equation}
 
-其中，$z_f=0$表示悬浮架停靠在轨道上，此时悬浮间隙最大；$z_f(t)=0.06\,m$表示悬浮间隙为零，悬浮架不能继续向上穿过轨道。因此，本文最终采用完整悬浮间隙硬约束模型：
+其中，$z_f(t)=0$表示悬浮架停靠在轨道上，此时悬浮间隙最大；$z_f(t)=0.06\,m$表示悬浮间隙为零，悬浮架不能继续向上穿过轨道。因此，本文最终采用完整悬浮间隙硬约束模型：
 \[
 \boxed{
 0\leq z_{\text{gap}}(t)\leq0.06\,m
