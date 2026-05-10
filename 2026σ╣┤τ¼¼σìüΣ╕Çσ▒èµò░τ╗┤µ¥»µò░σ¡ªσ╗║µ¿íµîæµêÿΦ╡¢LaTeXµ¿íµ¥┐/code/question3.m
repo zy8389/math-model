@@ -1,3 +1,6 @@
+% (*@\textcolor{red}{\textbf{本脚本由参赛队员独立编写。编辑过程中曾使用 DeepSeek}}@*)
+% (*@\textcolor{red}{\textbf{（deepseek-v4-flash-thinking，杭州深度求索人工智能基础技术研究有限公司，2026）}}@*)
+% (*@\textcolor{red}{\textbf{进行代码风格统一与注释清理，核心算法与公式实现均由参赛队员独立完成并验证。}}@*)
 clear; clc;
 
 M = readmatrix('附件3.xlsx', 'Range', 'A3');
